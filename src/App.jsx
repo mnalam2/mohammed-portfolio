@@ -29,6 +29,7 @@ export default function App() {
             <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
             <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
             <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
+            <a href="#education" className="hover:text-cyan-400 transition">Education</a>
             <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
           </div>
         </nav>
@@ -59,9 +60,9 @@ export default function App() {
           <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Experience</h2>
           <div className="space-y-6 text-gray-300 text-sm">
             <div>
-              <h3 className="text-xl font-semibold">Lead Automation Engineer, 07/2021 – Current</h3>
-              <p><strong>Generali Global Assistance – San Diego, CA</strong></p>
-              <ul className="list-disc list-inside">
+              <strong>Lead Automation Engineer</strong>, 07/2021 - Current<br/>
+              <em>Generali Global Assistance – San Diego, CA</em>
+              <ul className="list-disc list-inside mt-2">
                 <li>Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.</li>
                 <li>Developed and maintained JavaScript-based Playwright tests for UI and end-to-end coverage.</li>
                 <li>Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.</li>
@@ -70,9 +71,9 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold">Software QA Engineer II, 09/2019 – 07/2021</h3>
-              <p><strong>Green Dot Corporation – La Jolla, CA</strong></p>
-              <ul className="list-disc list-inside">
+              <strong>Software QA Engineer II</strong>, 09/2019 - 07/2021<br/>
+              <em>Green Dot Corporation – La Jolla, CA</em>
+              <ul className="list-disc list-inside mt-2">
                 <li>Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.</li>
                 <li>Developed and maintained C#/.NET automation including component-level testing and API verification.</li>
                 <li>Conducted backend validations on data migrations from Pervasive SQL to MySQL.</li>
@@ -80,26 +81,26 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold">Quality Engineering & Assurance Analyst, 06/2018 – 08/2019</h3>
-              <p><strong>Cognizant – Irving, TX</strong></p>
-              <ul className="list-disc list-inside">
+              <strong>Quality Engineering & Assurance Analyst</strong>, 06/2018 - 08/2019<br/>
+              <em>Cognizant – Irving, TX</em>
+              <ul className="list-disc list-inside mt-2">
                 <li>Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.</li>
                 <li>Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.</li>
                 <li>Validated client backend coding through IBM AS/400 and query testing.</li>
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold">Software Test Engineer, 05/2018 – 06/2018</h3>
-              <p><strong>Abbott – San Diego, CA</strong></p>
-              <ul className="list-disc list-inside">
+              <strong>Software Test Engineer</strong>, 05/2018 - 06/2018<br/>
+              <em>Abbott – San Diego, CA</em>
+              <ul className="list-disc list-inside mt-2">
                 <li>Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.</li>
                 <li>Validated GUI components and collaborated with developers to resolve issues via JIRA.</li>
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold">Software QA Intern, 05/2016 – 08/2016</h3>
-              <p><strong>United Airlines – Chicago, IL</strong></p>
-              <ul className="list-disc list-inside">
+              <strong>Software QA Intern</strong>, 05/2016 - 08/2016<br/>
+              <em>United Airlines – Chicago, IL</em>
+              <ul className="list-disc list-inside mt-2">
                 <li>Automated deployment pipelines and testing using CA Technologies Release Automation.</li>
                 <li>Helped modernize www.united.com deployment workflows with Agile automation strategies.</li>
               </ul>
@@ -109,31 +110,42 @@ export default function App() {
 
         <motion.section id="projects" variants={fadeInUp}>
           <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Projects</h2>
-          <ul className="space-y-4 text-gray-300">
-            <li>
-              <strong>Operating System Project</strong> – <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline">GitHub</a>
+          <div className="text-gray-300 text-sm space-y-4">
+            <div>
+              <strong>Operating System Project – </strong>
+              <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrb" className="text-cyan-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                GitHub Repo
+              </a>
               <p>Developed a full OS in x86/C with memory protection, file system, and I/O drivers.</p>
-            </li>
-            <li>
-              <strong>AI Projects</strong> – <a href="https://github.com/mnalam2/Artificial-Intelligence-Projects" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline">GitHub</a>
+            </div>
+            <div>
+              <strong>AI Projects – </strong>
+              <a href="https://github.com/mnalam2/Artificial-Intelligence-Projects" className="text-cyan-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                GitHub Repo
+              </a>
               <p>Implemented search algorithms, game AI, and probabilistic reasoning.</p>
-            </li>
-          </ul>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section id="education" variants={fadeInUp}>
+          <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Education</h2>
+          <p className="text-gray-300 text-sm">
+            <strong>Bachelor of Science:</strong> Computer Engineering, 2017<br />
+            <strong>University of Illinois At Urbana-Champaign</strong> – Champaign, IL<br />
+            <strong>Applicable Coursework:</strong> Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
+          </p>
         </motion.section>
 
         <motion.section id="contact" className="text-center" variants={fadeInUp}>
           <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Contact</h2>
-          <p className="text-gray-300 mb-4">Let’s connect! Reach out via email or LinkedIn.</p>
-          <div className="flex justify-center gap-6">
-            <a href="mailto:mohammed.nafi.alam@gmail.com" className="text-cyan-400 hover:underline flex items-center gap-2">
-              <FaEnvelope /> mohammed.nafi.alam@gmail.com
-            </a>
-            <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="text-cyan-400 hover:underline flex items-center gap-2" target="_blank" rel="noopener noreferrer">
-              <FaLinkedin /> LinkedIn
-            </a>
-          </div>
+          <form className="space-y-4 max-w-xl mx-auto">
+            <input type="text" placeholder="Your Name" className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+            <input type="email" placeholder="Your Email" className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+            <textarea placeholder="Your Message" rows="5" className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
+            <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-6 py-2 rounded-full transition">Send Message</button>
+          </form>
         </motion.section>
-
       </motion.section>
     </main>
   );
