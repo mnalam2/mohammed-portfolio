@@ -24,7 +24,7 @@ export default function App() {
         variants={fadeInUp}
       >
         <nav className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50 px-6 py-4 flex justify-between items-center shadow-md">
-          <span className="text-lg font-bold text-cyan-400">Mohammed N Alam</span>
+          <span className="text-lg font-bold text-cyan-400">Mohammed Alam</span>
           <div className="flex gap-6 text-sm">
             <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
             <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
