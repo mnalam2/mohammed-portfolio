@@ -37,11 +37,18 @@ export default function App() {
         <motion.section id="home" className="text-center pt-28" variants={fadeInUp}>
           <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 animate-fadeInUp">Mohammed Alam</h1>
           <p className="text-xl text-gray-300 mt-4">Software Engineer | Delivering Reliable Systems Through Automation & CI/CD</p>
-          <div className="mt-6 flex justify-center gap-8">
-            <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer"><FaLinkedin size={24} /></a>
-            <a href="https://github.com/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer"><FaGithub size={24} /></a>
-            <a href="/MohammedAlamResume.pdf" download className="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2 rounded-full shadow hover:shadow-lg transition text-white font-semibold flex items-center gap-2">📄 Resume</a>
-          </div>
+          <div className="mt-6 flex flex-col items-center gap-4">
+  <div className="flex gap-8">
+    <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer"><FaLinkedin size={24} /></a>
+    <a href="https://github.com/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer"><FaGithub size={24} /></a>
+  </div>
+  <a href="/MohammedAlamResume.pdf" download className="flex items-center gap-2 px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition duration-300 hover:bg-gray-200">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v16h16V4H4zm4 8h8m-4-4v8" />
+    </svg>
+    Download Resume
+  </a>
+</div>
         </motion.section>
 
         <motion.section id="skills" variants={fadeInUp}>
@@ -138,14 +145,15 @@ export default function App() {
         </motion.section>
 
         <motion.section id="contact" className="text-center" variants={fadeInUp}>
-          <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Contact</h2>
-          <form className="space-y-4 max-w-xl mx-auto">
-            <input type="text" placeholder="Your Name" className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
-            <input type="email" placeholder="Your Email" className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
-            <textarea placeholder="Your Message" rows="5" className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
-            <button type="submit" className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-6 py-2 rounded-full transition">Send Message</button>
-          </form>
-        </motion.section>
+  <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Contact</h2>
+  <p className="text-gray-300 text-sm">Feel free to reach out directly at:</p>
+  <p className="text-cyan-400 mt-2">
+    <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:underline">mohammed.nafi.alam@gmail.com</a>
+  </p>
+  <p className="text-cyan-400 mt-2">
+    <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+  </p>
+</motion.section>
       </motion.section>
     </main>
   );
