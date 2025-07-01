@@ -29,7 +29,6 @@ export default function App() {
             <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
             <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
             <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
-            <a href="#education" className="hover:text-cyan-400 transition">Education</a>
             <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
           </div>
         </nav>
@@ -60,8 +59,8 @@ export default function App() {
           <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Experience</h2>
           <div className="space-y-6 text-gray-300 text-sm">
             <div>
-              <p className="font-bold">Lead Automation Engineer, 07/2021 – Current</p>
-              <p className="italic">Generali Global Assistance – San Diego, CA</p>
+              <h3 className="text-xl font-semibold">Lead Automation Engineer, 07/2021 – Current</h3>
+              <p><strong>Generali Global Assistance – San Diego, CA</strong></p>
               <ul className="list-disc list-inside">
                 <li>Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.</li>
                 <li>Developed and maintained JavaScript-based Playwright tests for UI and end-to-end coverage.</li>
@@ -71,8 +70,8 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <p className="font-bold">Software QA Engineer II, 09/2019 – 07/2021</p>
-              <p className="italic">Green Dot Corporation – La Jolla, CA</p>
+              <h3 className="text-xl font-semibold">Software QA Engineer II, 09/2019 – 07/2021</h3>
+              <p><strong>Green Dot Corporation – La Jolla, CA</strong></p>
               <ul className="list-disc list-inside">
                 <li>Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.</li>
                 <li>Developed and maintained C#/.NET automation including component-level testing and API verification.</li>
@@ -81,8 +80,8 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <p className="font-bold">Quality Engineering & Assurance Analyst, 06/2018 – 08/2019</p>
-              <p className="italic">Cognizant – Irving, TX</p>
+              <h3 className="text-xl font-semibold">Quality Engineering & Assurance Analyst, 06/2018 – 08/2019</h3>
+              <p><strong>Cognizant – Irving, TX</strong></p>
               <ul className="list-disc list-inside">
                 <li>Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.</li>
                 <li>Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.</li>
@@ -90,16 +89,16 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <p className="font-bold">Software Test Engineer, 05/2018 – 06/2018</p>
-              <p className="italic">Abbott – San Diego, CA</p>
+              <h3 className="text-xl font-semibold">Software Test Engineer, 05/2018 – 06/2018</h3>
+              <p><strong>Abbott – San Diego, CA</strong></p>
               <ul className="list-disc list-inside">
                 <li>Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.</li>
                 <li>Validated GUI components and collaborated with developers to resolve issues via JIRA.</li>
               </ul>
             </div>
             <div>
-              <p className="font-bold">Software QA Intern, 05/2016 – 08/2016</p>
-              <p className="italic">United Airlines – Chicago, IL</p>
+              <h3 className="text-xl font-semibold">Software QA Intern, 05/2016 – 08/2016</h3>
+              <p><strong>United Airlines – Chicago, IL</strong></p>
               <ul className="list-disc list-inside">
                 <li>Automated deployment pipelines and testing using CA Technologies Release Automation.</li>
                 <li>Helped modernize www.united.com deployment workflows with Agile automation strategies.</li>
@@ -121,6 +120,20 @@ export default function App() {
             </li>
           </ul>
         </motion.section>
+
+        <motion.section id="contact" className="text-center" variants={fadeInUp}>
+          <h2 className="text-4xl font-bold text-blue-400 border-b border-gray-700 pb-2 mb-6">Contact</h2>
+          <p className="text-gray-300 mb-4">Let’s connect! Reach out via email or LinkedIn.</p>
+          <div className="flex justify-center gap-6">
+            <a href="mailto:mohammed.nafi.alam@gmail.com" className="text-cyan-400 hover:underline flex items-center gap-2">
+              <FaEnvelope /> mohammed.nafi.alam@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="text-cyan-400 hover:underline flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin /> LinkedIn
+            </a>
+          </div>
+        </motion.section>
+
       </motion.section>
     </main>
   );
