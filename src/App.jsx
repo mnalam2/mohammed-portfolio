@@ -4,7 +4,10 @@ import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
 
 export default function App() {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const hash = window.location.hash;
+    if (!hash) {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   return (
@@ -42,14 +45,14 @@ export default function App() {
             Software Engineer in Test | Playwright | Azure DevOps | C# | JavaScript
           </p>
           <div className="mt-6 flex justify-center gap-8">
-            <a href="https://www.linkedin.com/in/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer">
               <FaLinkedin size={24} />
             </a>
             <a href="https://github.com/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer">
               <FaGithub size={24} />
             </a>
             <a
-              href="/resume.pdf"
+              href="/MohammedAlamResume.pdf"
               download
               className="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2 rounded-full shadow hover:shadow-lg transition text-white font-semibold flex items-center gap-2"
             >
