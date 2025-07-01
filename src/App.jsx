@@ -11,7 +11,14 @@ export default function App() {
           <div className="mt-4 space-x-4">
             <a href="https://linkedin.com" className="text-blue-600 underline">LinkedIn</a>
             <a href="https://github.com" className="text-blue-600 underline">GitHub</a>
-            <a href="/resume.pdf" download className="text-blue-600 underline">Download Resume</a>
+            <a
+  href="/MohammedAlamResume.pdf"
+  download
+  className="inline-block mt-4 bg-blue-600 text-white px-5 py-2 rounded-md shadow hover:bg-blue-700 transition"
+>
+  📄 Download Resume
+</a>
+
           </div>
         </header>
         <section>
