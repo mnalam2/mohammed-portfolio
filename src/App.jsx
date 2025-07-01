@@ -24,7 +24,7 @@ export default function App() {
         variants={fadeInUp}
       >
         <nav className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50 px-6 py-4 flex justify-between items-center shadow-md">
-          <span className="text-lg font-bold text-cyan-400">Aya</span>
+          <span className="text-lg font-bold text-cyan-400">Mohammed Alam</span>
           <div className="flex gap-6 text-sm">
             <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
             <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
@@ -35,7 +35,7 @@ export default function App() {
         </nav>
 
         <motion.section id="home" className="text-center pt-28" variants={fadeInUp}>
-          <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 animate-fadeInUp">Aya</h1>
+          <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 animate-fadeInUp">Mohammed Alam</h1>
           <p className="text-xl text-gray-300 mt-4">Software Engineer | Delivering Reliable Systems Through Automation & CI/CD</p>
           <div className="mt-6 flex flex-col items-center gap-4">
   <div className="flex gap-8">
