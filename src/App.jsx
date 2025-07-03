@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaSun, FaMoon } from 'react-icons/fa';
+import { Typewriter } from 'react-simple-typewriter';
 
 export default function App() {
+  const [darkMode, setDarkMode] = useState(true);
+
   useEffect(() => {
     const hash = window.location.hash;
     if (!hash) {
@@ -16,26 +19,45 @@ export default function App() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12 scroll-smooth">
+    <main className={`${darkMode ? 'bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white' : 'bg-white text-black'} min-h-screen font-sans p-4 sm:p-6 md:p-12 scroll-smooth transition-colors duration-500`}>
       <motion.section
         className="max-w-6xl mx-auto space-y-24"
         initial="hidden"
         animate="visible"
         variants={fadeInUp}
       >
-        <nav className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50 px-4 sm:px-6 py-4 flex flex-wrap justify-between items-center shadow-md">
+        <nav className={`fixed top-0 left-0 w-full ${darkMode ? 'bg-black/70 text-white' : 'bg-white/80 text-black'} backdrop-blur border-b border-gray-800 z-50 px-4 sm:px-6 py-4 flex flex-wrap justify-between items-center shadow-md transition-colors duration-500`}>
           <span className="text-lg font-bold text-cyan-400">Mohammed Alam</span>
-          <div className="flex flex-wrap gap-4 text-sm mt-2 sm:mt-0">
-            <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
-            <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
-            <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
-            <a href="#education" className="hover:text-cyan-400 transition">Education</a>
-            <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
+          <div className="flex items-center gap-4">
+            <div className="flex flex-wrap gap-4 text-sm mt-2 sm:mt-0">
+              <a href="#skills" className="hover:text-cyan-400 transition">Skills</a>
+              <a href="#experience" className="hover:text-cyan-400 transition">Experience</a>
+              <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
+              <a href="#education" className="hover:text-cyan-400 transition">Education</a>
+              <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
+            </div>
+            <button
+              className="ml-4 hover:text-cyan-400 transition text-lg"
+              onClick={() => setDarkMode(!darkMode)}
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? <FaSun /> : <FaMoon />}
+            </button>
           </div>
         </nav>
 
         <motion.section id="home" className="text-center pt-32 px-2 sm:px-6" variants={fadeInUp}>
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Mohammed Alam</h1>
+          <h1 className="text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+            <Typewriter
+              words={["Mohammed Alam"]}
+              loop={1}
+              cursor
+              cursorStyle="_"
+              typeSpeed={70}
+              deleteSpeed={50}
+              delaySpeed={1000}
+            />
+          </h1>
           <p className="text-lg sm:text-xl text-gray-300 mt-4">Software Engineer | Delivering Reliable Systems Through Automation & CI/CD</p>
           <div className="mt-6 flex flex-col items-center gap-4">
             <div className="flex gap-6">
