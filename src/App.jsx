@@ -217,52 +217,60 @@ export default function App() {
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Experience">
-          <div className="space-y-8 text-gray-300 text-sm">
-            <Exp
-              role="Lead Automation Engineer"
-              time="07/2021 – Present"
-              org="Generali Global Assistance — San Diego, CA"
-              bullets={[
-                "Scaled API test automation in Robot Framework integrated with Jenkins, improving release cadence by ~40%.",
-                "Built and maintained Playwright UI/E2E suites in JavaScript for critical flows.",
-                "Stood up Datadog dashboards + alerts to catch regressions early, cutting triage time by ~50%.",
-                "Partnered with DevOps across DynamoDB, ECS, SNS, SQS microservices.",
-                "SME for Integration & Payments; guided framework design and best practices across teams.",
-              ]}
-            />
-            <Exp
-              role="Software QA Engineer II"
-              time="09/2019 – 07/2021"
-              org="Green Dot Corporation — La Jolla, CA"
-              bullets={[
-                "Managed deployments via TeamCity, Octopus, and Azure DevOps.",
-                "Developed C#/.NET automation including component tests and API verification.",
-                "Validated data migrations Pervasive SQL → MySQL with backend checks.",
-              ]}
-            />
-            <Exp
-              role="Quality Engineering & Assurance Analyst"
-              time="06/2018 – 08/2019"
-              org="Cognizant — Irving, TX"
-              bullets={[
-                "Accelerated training in consulting, Java, Oracle SQL, JDBC, JUnit, JSP, Selenium.",
-                "Designed automated scenarios and triaged defects through SFDC.",
-              ]}
-            />
-            <Exp
-              role="Software Test Engineer"
-              time="05/2018 – 06/2018"
-              org="Abbott — San Diego, CA"
-              bullets={["Wrote test protocols for USB-connected drug test devices; validated GUI components."]}
-            />
-            <Exp
-              role="Software QA Intern"
-              time="05/2016 – 08/2016"
-              org="United Airlines — Chicago, IL"
-              bullets={["Automated deployment pipelines and testing with CA Release Automation."]}
-            />
-          </div>
-        </Section>
+  <div className="space-y-8 text-gray-300 text-sm">
+    <Exp
+      role="Lead Automation Engineer"
+      time="07/2021 – Current"
+      org="Generali Global Assistance — San Diego, CA"
+      bullets={[
+        "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
+        "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
+        "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
+        "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
+        "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
+      ]}
+    />
+    <Exp
+      role="Software QA Engineer II"
+      time="09/2019 – 07/2021"
+      org="Green Dot Corporation — La Jolla, CA"
+      bullets={[
+        "Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.",
+        "Developed and maintained C#/.NET automation including component-level testing and API verification.",
+        "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
+        "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
+      ]}
+    />
+    <Exp
+      role="Quality Engineering & Assurance Analyst"
+      time="06/2018 – 08/2019"
+      org="Cognizant — Irving, TX"
+      bullets={[
+        "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
+        "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
+        "Validated client backend coding through IBM AS/400 and query testing.",
+      ]}
+    />
+    <Exp
+      role="Software Test Engineer"
+      time="05/2018 – 06/2018"
+      org="Abbott — San Diego, CA"
+      bullets={[
+        "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
+        "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
+      ]}
+    />
+    <Exp
+      role="Software QA Intern"
+      time="05/2016 – 08/2016"
+      org="United Airlines — Chicago, IL"
+      bullets={[
+        "Automated deployment pipelines and testing using CA Technologies Release Automation.",
+        "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
+      ]}
+    />
+  </div>
+</Section>
 
         {/* PROJECTS */}
         <Section id="projects" title="Projects">
