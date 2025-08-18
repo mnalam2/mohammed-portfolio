@@ -2,12 +2,12 @@
   Mohammed Alam – Portfolio (React, Vite, Tailwind)
   - Mobile friendly with hamburger nav.
   - Scroll-spy, accessible mobile menu (focus trap + Esc), smooth hash updates.
-  - Animations run once on first reveal. Respects reduced motion.
+  - Animations run only once using useInView + "seen" lock (no re-trigger on scroll up/down).
   - Resume wording is 1:1 with your PDF for Skills, Experience, Projects.
 */
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes } from "react-icons/fa";
 
 export default function App() {
@@ -30,9 +30,7 @@ export default function App() {
           if (e.isIntersecting) {
             const hash = `#${e.target.id}`;
             setActive(hash);
-            if (location.hash !== hash) {
-              history.replaceState(null, "", hash);
-            }
+            if (location.hash !== hash) history.replaceState(null, "", hash);
           }
         });
       },
@@ -47,40 +45,45 @@ export default function App() {
     if (!menuOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-
-    const firstFocusable = menuRef.current?.querySelector("a,button");
-    firstFocusable?.focus();
-
+    menuRef.current?.querySelector("a,button")?.focus();
     const onKey = (e) => { if (e.key === "Escape") setMenuOpen(false); };
     window.addEventListener("keydown", onKey);
     return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
   }, [menuOpen]);
 
-  // Reusable fade variant
-  const fadeInUp = {
+  // Stable variants reference
+  const fadeInUp = useMemo(() => ({
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  }), []);
+
+  // Section that animates only once using a local "seen" lock
+  const Section = ({ id, title, children }) => {
+    const ref = useRef(null);
+    const inView = useInView(ref, { amount: 0.2 });
+    const [seen, setSeen] = useState(false);
+
+    useEffect(() => {
+      if (inView && !seen) setSeen(true);
+    }, [inView, seen]);
+
+    return (
+      <motion.section
+        ref={ref}
+        id={id}
+        aria-labelledby={`${id}-title`}
+        className="scroll-mt-24"
+        variants={fadeInUp}
+        initial={prefersReducedMotion ? false : "hidden"}
+        animate={prefersReducedMotion ? undefined : (seen ? "visible" : "hidden")}
+      >
+        <h2 id={`${id}-title`} className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+          {title}
+        </h2>
+        {children}
+      </motion.section>
+    );
   };
-
-  // Anim props: only animate once when scrolled into view, or disable if reduced motion
-  const sectionAnimProps = prefersReducedMotion
-    ? {}
-    : { initial: "hidden", whileInView: "visible", viewport: { once: true, amount: 0.2 } };
-
-  const Section = ({ id, title, children }) => (
-    <motion.section
-      id={id}
-      aria-labelledby={`${id}-title`}
-      variants={fadeInUp}
-      {...sectionAnimProps}
-      className="scroll-mt-24"
-    >
-      <h2 id={`${id}-title`} className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-        {title}
-      </h2>
-      {children}
-    </motion.section>
-  );
 
   const Chip = ({ children }) => (
     <span className="inline-flex items-center rounded-full border border-cyan-700/40 bg-cyan-900/10 px-2 sm:px-3 py-1 text-xs md:text-sm text-cyan-200">
@@ -109,7 +112,7 @@ export default function App() {
         Skip to content
       </a>
 
-      {/* Removed parent initial/animate to prevent child re-triggers */}
+      {/* No parent motion container to avoid child reset */}
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
         {/* NAV */}
         <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50">
@@ -161,35 +164,8 @@ export default function App() {
           )}
         </header>
 
-        {/* HERO */}
-        <motion.section id="home" className="pt-24 sm:pt-28 text-center" {...sectionAnimProps} variants={fadeInUp}>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-            Mohammed Alam
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3">
-            Software Engineer in Test — Automation, CI/CD, and reliable releases
-          </p>
-          <div className="mt-6 flex flex-col items-center gap-4">
-            <div className="flex gap-6 text-2xl">
-              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <FaLinkedin />
-              </a>
-              <a href="https://github.com/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <FaGithub />
-              </a>
-              <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400" aria-label="Email Mohammed">
-                <FaEnvelope />
-              </a>
-            </div>
-            <a
-              href="/MohammedAlamResume.pdf"
-              download
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
-            >
-              <FaDownload className="text-black" /> Download Resume
-            </a>
-          </div>
-        </motion.section>
+        {/* HERO (animates once) */}
+        <Hero prefersReducedMotion={prefersReducedMotion} fadeInUp={fadeInUp} />
 
         {/* SKILLS (word-for-word with resume) */}
         <Section id="skills" title="Skills">
@@ -321,6 +297,50 @@ export default function App() {
         </footer>
       </div>
     </main>
+  );
+}
+
+function Hero({ prefersReducedMotion, fadeInUp }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { amount: 0.2 });
+  const [seen, setSeen] = useState(false);
+  useEffect(() => { if (inView && !seen) setSeen(true); }, [inView, seen]);
+  return (
+    <motion.section
+      ref={ref}
+      id="home"
+      className="pt-24 sm:pt-28 text-center"
+      variants={fadeInUp}
+      initial={prefersReducedMotion ? false : "hidden"}
+      animate={prefersReducedMotion ? undefined : (seen ? "visible" : "hidden")}
+    >
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+        Mohammed Alam
+      </h1>
+      <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3">
+        Software Engineer in Test — Automation, CI/CD, and reliable releases
+      </p>
+      <div className="mt-6 flex flex-col items-center gap-4">
+        <div className="flex gap-6 text-2xl">
+          <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <FaLinkedin />
+          </a>
+          <a href="https://github.com/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <FaGithub />
+          </a>
+          <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400" aria-label="Email Mohammed">
+            <FaEnvelope />
+          </a>
+        </div>
+        <a
+          href="/MohammedAlamResume.pdf"
+          download
+          className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
+        >
+          <FaDownload className="text-black" /> Download Resume
+        </a>
+      </div>
+    </motion.section>
   );
 }
 
