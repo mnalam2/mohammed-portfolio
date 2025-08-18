@@ -1,47 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes } from "react-icons/fa";
 
 export default function App() {
-  const prefersReducedMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!window.location.hash) window.scrollTo({ top: 0 });
   }, []);
 
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-
-  const Section = ({ id, title, children }) => {
-    const [seen, setSeen] = useState(false);
-    const ref = useRef(null);
-
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !seen) {
-            setSeen(true);
-            observer.disconnect();
-          }
-        },
-        { threshold: 0.2 }
-      );
-      if (ref.current) observer.observe(ref.current);
-      return () => observer.disconnect();
-    }, [seen]);
-
-    return (
-      <section id={id} ref={ref} className="scroll-mt-24">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-          {title}
-        </h2>
-        {children}
-      </section>
-    );
-  };
+  const Section = ({ id, title, children }) => (
+    <section id={id} className="scroll-mt-24">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
 
   const navItems = [
     ["Skills", "#skills"],
@@ -132,31 +106,31 @@ export default function App() {
         <Section id="skills" title="Skills">
           <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
             <div className="space-y-3">
-              <p><strong>•  Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL</p>
-              <p><strong>•  CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker</p>
-              <p><strong>•  Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing</p>
+              <p>• Languages & Frameworks: C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL</p>
+              <p>• CI/CD & DevOps: Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker</p>
+              <p>• Testing Expertise: Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing</p>
             </div>
             <div className="space-y-3">
-              <p><strong>•  Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman</p>
-              <p><strong>•  Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog</p>
-              <p><strong>•  Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC</p>
+              <p>• Test Automation Tools: Playwright, Robot Framework, Selenium, JMeter, Postman</p>
+              <p>• Cloud & Monitoring: AWS (DynamoDB, ECS, SNS, SQS), Datadog</p>
+              <p>• Version Control & Collaboration: Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC</p>
             </div>
           </div>
         </Section>
 
         {/* EXPERIENCE */}
-        <Section id="experience" title="Experience">
+        <Section id="experience" title="Work History">
           <div className="space-y-8 text-gray-300 text-sm">
             <Exp
               role="Lead Automation Engineer"
-              time="07/2021 – Present"
+              time="07/2021 – Current"
               org="Generali Global Assistance – San Diego, CA"
               bullets={[
-                "Scaled API test automation in Robot Framework integrated with Jenkins, improving release cadence by ~40%.",
-                "Built and maintained Playwright UI/E2E suites in JavaScript for critical flows.",
-                "Stood up Datadog dashboards + alerts to catch regressions early, cutting triage time by ~50%.",
-                "Partnered with DevOps across DynamoDB, ECS, SNS, SQS microservices.",
-                "SME for Integration & Payments; guided framework design and best practices across teams.",
+                "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
+                "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
+                "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
+                "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
+                "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
               ]}
             />
             <Exp
@@ -164,49 +138,39 @@ export default function App() {
               time="09/2019 – 07/2021"
               org="Green Dot Corporation – La Jolla, CA"
               bullets={[
-                "Managed deployments via TeamCity, Octopus, and Azure DevOps.",
-                "Developed C#/.NET automation including component tests and API verification.",
-                "Validated data migrations Pervasive SQL → MySQL with backend checks.",
+                "Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.",
+                "Developed and maintained C#/.NET automation including component-level testing and API verification.",
+                "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
+                "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
               ]}
             />
             <Exp
-              role="QA Analyst"
+              role="Quality Engineering & Assurance Analyst"
               time="06/2018 – 08/2019"
               org="Cognizant – Irving, TX"
               bullets={[
-                "Accelerated training in consulting, Java, Oracle SQL, JDBC, JUnit, JSP, Selenium.",
-                "Designed automated scenarios and triaged defects through SFDC.",
+                "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
+                "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
+                "Validated client backend coding through IBM AS/400 and query testing.",
               ]}
             />
             <Exp
-              role="Test Engineer"
+              role="Software Test Engineer"
               time="05/2018 – 06/2018"
               org="Abbott – San Diego, CA"
-              bullets={["Wrote test protocols for USB-connected drug test devices; validated GUI components."]}
+              bullets={[
+                "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
+                "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
+              ]}
             />
             <Exp
-              role="QA Intern"
+              role="Software QA Intern"
               time="05/2016 – 08/2016"
               org="United Airlines – Chicago, IL"
-              bullets={["Automated deployment pipelines and testing with CA Release Automation."]}
-            />
-          </div>
-        </Section>
-
-        {/* PROJECTS */}
-        <Section id="projects" title="Projects">
-          <div className="grid sm:grid-cols-2 gap-6">
-            <ProjectCard
-              title="Operating System"
-              href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
-              desc="Built a teaching OS in x86/C with memory protection, file system, and I/O drivers."
-              tags={["C", "x86", "OS"]}
-            />
-            <ProjectCard
-              title="AI Projects"
-              href="https://github.com/mnalam2/Artificial-Intelligence-Projects"
-              desc="Implemented search algorithms, game AI, and probabilistic reasoning."
-              tags={["Python", "AI", "Algorithms"]}
+              bullets={[
+                "Automated deployment pipelines and testing using CA Technologies Release Automation.",
+                "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
+              ]}
             />
           </div>
         </Section>
@@ -214,8 +178,28 @@ export default function App() {
         {/* EDUCATION */}
         <Section id="education" title="Education">
           <p className="text-gray-300 text-sm">
-            <strong>B.S. in Computer Engineering</strong> — University of Illinois Urbana‑Champaign (2017)
+            <strong>Bachelor of Science: Computer Engineering, 2017</strong><br />
+            University of Illinois At Urbana-Champaign - Champaign, IL <br />
+            Applicable Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
           </p>
+        </Section>
+
+        {/* PROJECTS */}
+        <Section id="projects" title="Projects">
+          <div className="space-y-6">
+            <div>
+              <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-semibold">Operating System Project</a>
+              <ul className="list-disc list-inside mt-1 text-sm text-gray-300">
+                <li>Developed a full OS in x86/C with memory protection, file system, and I/O drivers.</li>
+              </ul>
+            </div>
+            <div>
+              <a href="https://github.com/mnalam2/Artificial-Intelligence-Projects" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-semibold">AI Projects</a>
+              <ul className="list-disc list-inside mt-1 text-sm text-gray-300">
+                <li>Implemented search algorithms, game AI, and probabilistic reasoning.</li>
+              </ul>
+            </div>
+          </div>
         </Section>
 
         {/* CONTACT */}
@@ -253,26 +237,5 @@ function Exp({ role, time, org, bullets }) {
         ))}
       </ul>
     </div>
-  );
-}
-
-function ProjectCard({ title, href, desc, tags }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-700/50 hover:shadow-lg transition"
-    >
-      <h3 className="text-lg font-semibold text-white group-hover:text-cyan-400">{title}</h3>
-      <p className="text-gray-300 text-sm mt-1">{desc}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {tags.map((t) => (
-          <span key={t} className="inline-flex items-center rounded-md bg-gray-800 px-2 py-0.5 text-[11px] text-gray-300">
-            {t}
-          </span>
-        ))}
-      </div>
-    </a>
   );
 }
