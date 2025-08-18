@@ -157,31 +157,14 @@ export default function App() {
           <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
             <div className="space-y-3">
               <p>
-                <strong>Languages</strong>: C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL
-              </p>
-              <p>
-                <strong>Automation</strong>: Playwright, Robot Framework, Selenium, JMeter, Postman
-              </p>
-              <p>
-                <strong>CI/CD & DevOps</strong>: Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker
+                C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL, Robot Framework, Playwright, Selenium, JMeter, Postman, Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker, AWS (DynamoDB, ECS, SNS, SQS), Git, Bitbucket, SVN, Datadog, Jira, Confluence, TestRail, SFDC
               </p>
             </div>
             <div className="space-y-3">
               <p>
-                <strong>Cloud & Monitoring</strong>: AWS (DynamoDB, ECS, SNS, SQS), Datadog
-              </p>
-              <p>
-                <strong>Testing</strong>: Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, Load testing
-              </p>
-              <p>
-                <strong>Collaboration</strong>: Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC
+                Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing
               </p>
             </div>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {["Playwright", "JMeter", "Robot Framework", "Datadog", "Jenkins", "AWS", "Docker", "Azure DevOps"].map((s) => (
-              <Chip key={s}>{s}</Chip>
-            ))}
           </div>
         </Section>
 
@@ -191,45 +174,45 @@ export default function App() {
             <Exp
               role="Lead Automation Engineer"
               time="07/2021 – Present"
-              org="Generali Global Assistance — San Diego, CA"
+              org="Generali Global Assistance"
               bullets={[
-                "Scaled API test automation in Robot Framework integrated with Jenkins, improving release cadence by ~40%.",
-                "Built and maintained Playwright UI/E2E suites in JavaScript for critical flows.",
-                "Stood up Datadog dashboards + alerts to catch regressions early, cutting triage time by ~50%.",
-                "Partnered with DevOps across DynamoDB, ECS, SNS, SQS microservices.",
-                "SME for Integration & Payments; guided framework design and best practices across teams.",
+                "Lead API automation development in Robot Framework integrated with Jenkins, increasing release efficiency.",
+                "Developed Playwright JavaScript E2E/UI automation suite for web and mobile flows.",
+                "Implemented monitoring and alerting with Datadog dashboards to detect issues and reduce triage time.",
+                "Collaborated with DevOps on AWS microservices: DynamoDB, ECS, SNS, SQS.",
+                "Integration and Payments SME, providing automation framework support across teams.",
               ]}
             />
             <Exp
               role="Software QA Engineer II"
               time="09/2019 – 07/2021"
-              org="Green Dot Corporation — La Jolla, CA"
+              org="Green Dot Corporation"
               bullets={[
-                "Managed deployments via TeamCity, Octopus, and Azure DevOps.",
-                "Developed C#/.NET automation including component tests and API verification.",
-                "Validated data migrations Pervasive SQL → MySQL with backend checks.",
+                "Managed deployments with TeamCity, Octopus, and Azure DevOps.",
+                "Built automation in C#/.NET including component tests and API validation.",
+                "Verified data migrations from Pervasive SQL to MySQL with backend validation.",
               ]}
             />
             <Exp
-              role="Quality Engineering & Assurance Analyst"
+              role="QA Analyst"
               time="06/2018 – 08/2019"
-              org="Cognizant — Irving, TX"
+              org="Cognizant"
               bullets={[
-                "Accelerated training in consulting, Java, Oracle SQL, JDBC, JUnit, JSP, Selenium.",
-                "Designed automated scenarios and triaged defects through SFDC.",
+                "Completed training in consulting, Java, Oracle SQL, JDBC, JUnit, JSP, Selenium.",
+                "Created automated test cases and managed defects in SFDC.",
               ]}
             />
             <Exp
-              role="Software Test Engineer"
+              role="Test Engineer"
               time="05/2018 – 06/2018"
-              org="Abbott — San Diego, CA"
-              bullets={["Wrote test protocols for USB-connected drug test devices; validated GUI components."]}
+              org="Abbott"
+              bullets={["Authored test protocols for USB‑connected drug test devices and validated GUI components."]}
             />
             <Exp
-              role="Software QA Intern"
+              role="QA Intern"
               time="05/2016 – 08/2016"
-              org="United Airlines — Chicago, IL"
-              bullets={["Automated deployment pipelines and testing with CA Release Automation."]}
+              org="United Airlines"
+              bullets={["Built deployment pipelines and automated testing with CA Release Automation."]}
             />
           </div>
         </Section>
@@ -240,14 +223,14 @@ export default function App() {
             <ProjectCard
               title="Operating System"
               href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
-              desc="Built a teaching OS in x86/C with memory protection, file system, and I/O drivers."
+              desc="Developed an operating system in C with x86 architecture, including memory protection, file system, and I/O drivers."
               tags={["C", "x86", "OS"]}
             />
             <ProjectCard
-              title="Artificial Intelligence Projects"
+              title="AI Projects"
               href="https://github.com/mnalam2/Artificial-Intelligence-Projects"
-              desc="Implemented search algorithms, game AI, and probabilistic reasoning."
-              tags={["Python", "AI", "Algorithms"]}
+              desc="Implemented search algorithms, game AI, and probabilistic reasoning in Python."
+              tags={["Python", "AI"]}
             />
           </div>
         </Section>
@@ -255,9 +238,7 @@ export default function App() {
         {/* EDUCATION */}
         <Section id="education" title="Education">
           <p className="text-gray-300 text-sm">
-            <strong>B.S., Computer Engineering</strong> — University of Illinois Urbana‑Champaign (2017)
-            <br />
-            Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
+            <strong>B.S. in Computer Engineering</strong> — University of Illinois Urbana‑Champaign (2017)
           </p>
         </Section>
 
