@@ -2,7 +2,8 @@
   Mohammed Alam – Portfolio (React, Vite, Tailwind)
   - Mobile friendly with hamburger nav.
   - Scroll-spy, accessible mobile menu (focus trap + Esc), smooth hash updates.
-  - No resume copy edits; only presentation, a11y, and polish.
+  - Animations run once on first reveal. Respects reduced motion.
+  - Resume wording is 1:1 with your PDF for Skills, Experience, Projects.
 */
 
 import React, { useEffect, useRef, useState } from "react";
@@ -55,13 +56,25 @@ export default function App() {
     return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
   }, [menuOpen]);
 
+  // Reusable fade variant
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
+  // Anim props: only animate once when scrolled into view, or disable if reduced motion
+  const sectionAnimProps = prefersReducedMotion
+    ? {}
+    : { initial: "hidden", whileInView: "visible", viewport: { once: true, amount: 0.2 } };
+
   const Section = ({ id, title, children }) => (
-    <motion.section id={id} aria-labelledby={`${id}-title`} variants={fadeInUp} className="scroll-mt-24">
+    <motion.section
+      id={id}
+      aria-labelledby={`${id}-title`}
+      variants={fadeInUp}
+      {...sectionAnimProps}
+      className="scroll-mt-24"
+    >
       <h2 id={`${id}-title`} className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
         {title}
       </h2>
@@ -96,12 +109,8 @@ export default function App() {
         Skip to content
       </a>
 
-      <motion.div
-        className="max-w-6xl mx-auto space-y-16 sm:space-y-24"
-        initial="hidden"
-        animate="visible"
-        variants={prefersReducedMotion ? { visible: { opacity: 1 } } : undefined}
-      >
+      {/* Removed parent initial/animate to prevent child re-triggers */}
+      <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
         {/* NAV */}
         <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
@@ -153,7 +162,7 @@ export default function App() {
         </header>
 
         {/* HERO */}
-        <motion.section id="home" className="pt-24 sm:pt-28 text-center" variants={fadeInUp}>
+        <motion.section id="home" className="pt-24 sm:pt-28 text-center" {...sectionAnimProps} variants={fadeInUp}>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
             Mohammed Alam
           </h1>
@@ -182,108 +191,108 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* SKILLS */}
+        {/* SKILLS (word-for-word with resume) */}
         <Section id="skills" title="Skills">
-  <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
-    <div className="space-y-3">
-      <p>
-        <strong>Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL
-      </p>
-      <p>
-        <strong>Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman
-      </p>
-      <p>
-        <strong>CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker
-      </p>
-    </div>
-    <div className="space-y-3">
-      <p>
-        <strong>Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog
-      </p>
-      <p>
-        <strong>Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing
-      </p>
-      <p>
-        <strong>Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC
-      </p>
-    </div>
-  </div>
-</Section>
+          <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
+            <div className="space-y-3">
+              <p>
+                <strong>Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL
+              </p>
+              <p>
+                <strong>Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman
+              </p>
+              <p>
+                <strong>CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker
+              </p>
+            </div>
+            <div className="space-y-3">
+              <p>
+                <strong>Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog
+              </p>
+              <p>
+                <strong>Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing
+              </p>
+              <p>
+                <strong>Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC
+              </p>
+            </div>
+          </div>
+        </Section>
 
-        {/* EXPERIENCE */}
+        {/* EXPERIENCE (word-for-word with resume) */}
         <Section id="experience" title="Experience">
-  <div className="space-y-8 text-gray-300 text-sm">
-    <Exp
-      role="Lead Automation Engineer"
-      time="07/2021 – Current"
-      org="Generali Global Assistance — San Diego, CA"
-      bullets={[
-        "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
-        "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
-        "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
-        "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
-        "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
-      ]}
-    />
-    <Exp
-      role="Software QA Engineer II"
-      time="09/2019 – 07/2021"
-      org="Green Dot Corporation — La Jolla, CA"
-      bullets={[
-        "Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.",
-        "Developed and maintained C#/.NET automation including component-level testing and API verification.",
-        "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
-        "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
-      ]}
-    />
-    <Exp
-      role="Quality Engineering & Assurance Analyst"
-      time="06/2018 – 08/2019"
-      org="Cognizant — Irving, TX"
-      bullets={[
-        "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
-        "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
-        "Validated client backend coding through IBM AS/400 and query testing.",
-      ]}
-    />
-    <Exp
-      role="Software Test Engineer"
-      time="05/2018 – 06/2018"
-      org="Abbott — San Diego, CA"
-      bullets={[
-        "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
-        "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
-      ]}
-    />
-    <Exp
-      role="Software QA Intern"
-      time="05/2016 – 08/2016"
-      org="United Airlines — Chicago, IL"
-      bullets={[
-        "Automated deployment pipelines and testing using CA Technologies Release Automation.",
-        "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
-      ]}
-    />
-  </div>
-</Section>
+          <div className="space-y-8 text-gray-300 text-sm">
+            <Exp
+              role="Lead Automation Engineer"
+              time="07/2021 – Current"
+              org="Generali Global Assistance — San Diego, CA"
+              bullets={[
+                "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
+                "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
+                "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
+                "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
+                "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
+              ]}
+            />
+            <Exp
+              role="Software QA Engineer II"
+              time="09/2019 – 07/2021"
+              org="Green Dot Corporation — La Jolla, CA"
+              bullets={[
+                "Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.",
+                "Developed and maintained C#/.NET automation including component-level testing and API verification.",
+                "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
+                "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
+              ]}
+            />
+            <Exp
+              role="Quality Engineering & Assurance Analyst"
+              time="06/2018 – 08/2019"
+              org="Cognizant — Irving, TX"
+              bullets={[
+                "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
+                "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
+                "Validated client backend coding through IBM AS/400 and query testing.",
+              ]}
+            />
+            <Exp
+              role="Software Test Engineer"
+              time="05/2018 – 06/2018"
+              org="Abbott — San Diego, CA"
+              bullets={[
+                "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
+                "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
+              ]}
+            />
+            <Exp
+              role="Software QA Intern"
+              time="05/2016 – 08/2016"
+              org="United Airlines — Chicago, IL"
+              bullets={[
+                "Automated deployment pipelines and testing using CA Technologies Release Automation.",
+                "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
+              ]}
+            />
+          </div>
+        </Section>
 
-        {/* PROJECTS */}
+        {/* PROJECTS (word-for-word with resume) */}
         <Section id="projects" title="Projects">
-  <div className="grid sm:grid-cols-2 gap-6">
-    <ProjectCard
-      title="Operating System Project"
-      href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
-      desc="Developed a full OS in x86/C with memory protection, file system, and I/O drivers."
-      tags={["C", "x86", "OS"]}
-    />
-    <ProjectCard
-      title="AI Projects"
-      href="https://github.com/mnalam2/Artificial-Intelligence-Projects"
-      desc="Implemented search algorithms, game AI, and probabilistic reasoning."
-      tags={["Python", "AI", "Algorithms"]}
-    />
-  </div>
-</Section>
+          <div className="grid sm:grid-cols-2 gap-6">
+            <ProjectCard
+              title="Operating System Project"
+              href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
+              desc="Developed a full OS in x86/C with memory protection, file system, and I/O drivers."
+              tags={["C", "x86", "OS"]}
+            />
+            <ProjectCard
+              title="AI Projects"
+              href="https://github.com/mnalam2/Artificial-Intelligence-Projects"
+              desc="Implemented search algorithms, game AI, and probabilistic reasoning."
+              tags={["Python", "AI", "Algorithms"]}
+            />
+          </div>
+        </Section>
 
         {/* EDUCATION */}
         <Section id="education" title="Education">
@@ -310,7 +319,7 @@ export default function App() {
         <footer className="text-center text-xs text-gray-500 pt-6 border-t border-gray-800">
           © {new Date().getFullYear()} Mohammed Alam. All rights reserved.
         </footer>
-      </motion.div>
+      </div>
     </main>
   );
 }
