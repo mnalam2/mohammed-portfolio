@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes } from "react-icons/fa";
 
 export default function App() {
@@ -106,14 +106,14 @@ export default function App() {
         <Section id="skills" title="Skills">
           <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
             <div className="space-y-3">
-              <p>• Languages & Frameworks: C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL</p>
-              <p>• CI/CD & DevOps: Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker</p>
-              <p>• Testing Expertise: Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing</p>
+              <p><strong>• Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL</p>
+              <p><strong>• CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker</p>
+              <p><strong>• Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing</p>
             </div>
             <div className="space-y-3">
-              <p>• Test Automation Tools: Playwright, Robot Framework, Selenium, JMeter, Postman</p>
-              <p>• Cloud & Monitoring: AWS (DynamoDB, ECS, SNS, SQS), Datadog</p>
-              <p>• Version Control & Collaboration: Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC</p>
+              <p><strong>• Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman</p>
+              <p><strong>• Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog</p>
+              <p><strong>• Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC</p>
             </div>
           </div>
         </Section>
@@ -121,6 +121,7 @@ export default function App() {
         {/* EXPERIENCE */}
         <Section id="experience" title="Work History">
           <div className="space-y-8 text-gray-300 text-sm">
+            {/* Keep bullets exactly word for word as resume */}
             <Exp
               role="Lead Automation Engineer"
               time="07/2021 – Current"
@@ -177,28 +178,26 @@ export default function App() {
 
         {/* EDUCATION */}
         <Section id="education" title="Education">
-          <p className="text-gray-300 text-sm">
-            <strong>Bachelor of Science: Computer Engineering, 2017</strong><br />
-            University of Illinois At Urbana-Champaign - Champaign, IL <br />
-            Applicable Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
-          </p>
+          <div className="rounded-lg border border-gray-800 bg-gray-900/40 p-5 text-sm text-gray-300">
+            <p className="text-white font-semibold">Bachelor of Science: Computer Engineering, 2017</p>
+            <p className="mt-1">University of Illinois At Urbana-Champaign - Champaign, IL</p>
+            <p className="mt-2 text-gray-400">
+              Applicable Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
+            </p>
+          </div>
         </Section>
 
         {/* PROJECTS */}
         <Section id="projects" title="Projects">
-          <div className="space-y-6">
-            <div>
-              <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-semibold">Operating System Project</a>
-              <ul className="list-disc list-inside mt-1 text-sm text-gray-300">
-                <li>Developed a full OS in x86/C with memory protection, file system, and I/O drivers.</li>
-              </ul>
-            </div>
-            <div>
-              <a href="https://github.com/mnalam2/Artificial-Intelligence-Projects" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-semibold">AI Projects</a>
-              <ul className="list-disc list-inside mt-1 text-sm text-gray-300">
-                <li>Implemented search algorithms, game AI, and probabilistic reasoning.</li>
-              </ul>
-            </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition">
+              <h3 className="text-cyan-400 font-semibold">Operating System Project ↗</h3>
+              <p className="mt-2 text-sm text-gray-300">Developed a full OS in x86/C with memory protection, file system, and I/O drivers.</p>
+            </a>
+            <a href="https://github.com/mnalam2/Artificial-Intelligence-Projects" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition">
+              <h3 className="text-cyan-400 font-semibold">AI Projects ↗</h3>
+              <p className="mt-2 text-sm text-gray-300">Implemented search algorithms, game AI, and probabilistic reasoning.</p>
+            </a>
           </div>
         </Section>
 
