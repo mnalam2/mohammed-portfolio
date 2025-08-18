@@ -33,7 +33,7 @@ export default function App() {
       return () => observer.disconnect();
     }, [seen]);
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || seen) {
       return (
         <section id={id} ref={ref} className="scroll-mt-24">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
@@ -44,7 +44,7 @@ export default function App() {
       );
     }
 
-    return seen ? (
+    return (
       <motion.section
         id={id}
         ref={ref}
@@ -58,13 +58,6 @@ export default function App() {
         </h2>
         {children}
       </motion.section>
-    ) : (
-      <section id={id} ref={ref} className="scroll-mt-24">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-          {title}
-        </h2>
-        {children}
-      </section>
     );
   };
 
