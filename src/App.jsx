@@ -132,16 +132,14 @@ export default function App() {
         <Section id="skills" title="Skills">
           <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
             <div className="space-y-3">
-              <p><strong>C/C++/C#</strong>, Java, Python, JavaScript</p>
-              <p><strong>Oracle SQL</strong>, MySQL</p>
-              <p><strong>Robot Framework</strong>, Playwright, Selenium, JMeter, Postman</p>
-              <p><strong>Jenkins</strong>, TeamCity, Octopus Deploy, Azure DevOps</p>
+              <p><strong>•  Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL</p>
+              <p><strong>•  CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker</p>
+              <p><strong>•  Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing</p>
             </div>
             <div className="space-y-3">
-              <p><strong>Docker</strong>, AWS (DynamoDB, ECS, SNS, SQS)</p>
-              <p><strong>Git</strong>, Bitbucket, SVN</p>
-              <p><strong>Datadog</strong></p>
-              <p><strong>Jira</strong>, Confluence, TestRail, SFDC</p>
+              <p><strong>•  Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman</p>
+              <p><strong>•  Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog</p>
+              <p><strong>•  Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC</p>
             </div>
           </div>
         </Section>
