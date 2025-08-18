@@ -184,36 +184,31 @@ export default function App() {
 
         {/* SKILLS */}
         <Section id="skills" title="Skills">
-          <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
-            <div className="space-y-3">
-              <p>
-                <strong>Languages</strong>: C/C++/C#, Java, Python, JavaScript, SQL (Oracle, MySQL)
-              </p>
-              <p>
-                <strong>Automation</strong>: Playwright, Robot Framework, Selenium, JMeter, Postman
-              </p>
-              <p>
-                <strong>CI/CD & DevOps</strong>: Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker
-              </p>
-            </div>
-            <div className="space-y-3">
-              <p>
-                <strong>Cloud & Monitoring</strong>: AWS (DynamoDB, ECS, SNS, SQS), Datadog
-              </p>
-              <p>
-                <strong>Testing</strong>: Component (C#), E2E (Playwright/JS), REST API, Load testing
-              </p>
-              <p>
-                <strong>Collab</strong>: Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC
-              </p>
-            </div>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {["Playwright", "JMeter", "Robot Framework", "Datadog", "Jenkins", "AWS", "Docker", "Azure DevOps"].map((s) => (
-              <Chip key={s}>{s}</Chip>
-            ))}
-          </div>
-        </Section>
+  <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
+    <div className="space-y-3">
+      <p>
+        <strong>Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL
+      </p>
+      <p>
+        <strong>Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman
+      </p>
+      <p>
+        <strong>CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker
+      </p>
+    </div>
+    <div className="space-y-3">
+      <p>
+        <strong>Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog
+      </p>
+      <p>
+        <strong>Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing
+      </p>
+      <p>
+        <strong>Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC
+      </p>
+    </div>
+  </div>
+</Section>
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Experience">
