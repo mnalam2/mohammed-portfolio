@@ -269,21 +269,21 @@ export default function App() {
 
         {/* PROJECTS */}
         <Section id="projects" title="Projects">
-          <div className="grid sm:grid-cols-2 gap-6">
-            <ProjectCard
-              title="Operating System"
-              href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
-              desc="Built a teaching OS in x86/C with memory protection, file system, and I/O drivers."
-              tags={["C", "x86", "OS"]}
-            />
-            <ProjectCard
-              title="AI Projects"
-              href="https://github.com/mnalam2/Artificial-Intelligence-Projects"
-              desc="Implemented search algorithms, game AI, and probabilistic reasoning."
-              tags={["Python", "AI", "Algorithms"]}
-            />
-          </div>
-        </Section>
+  <div className="grid sm:grid-cols-2 gap-6">
+    <ProjectCard
+      title="Operating System Project"
+      href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
+      desc="Developed a full OS in x86/C with memory protection, file system, and I/O drivers."
+      tags={["C", "x86", "OS"]}
+    />
+    <ProjectCard
+      title="AI Projects"
+      href="https://github.com/mnalam2/Artificial-Intelligence-Projects"
+      desc="Implemented search algorithms, game AI, and probabilistic reasoning."
+      tags={["Python", "AI", "Algorithms"]}
+    />
+  </div>
+</Section>
 
         {/* EDUCATION */}
         <Section id="education" title="Education">
