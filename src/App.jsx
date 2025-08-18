@@ -1,23 +1,22 @@
 /*
   Mohammed Alam – Portfolio (React, Vite, Tailwind)
-  - Clean, fast, accessible. No TypeScript.
-  - Keeps your existing deps: framer-motion + react-icons (no Helmet).
-  - SEO tags should go into public/index.html (snippet below in chat).
-  - Smooth anchors, sticky nav, improved sections, cards, and refined copy.
+  - Mobile friendly with hamburger nav.
+  - Clean, fast, accessible.
+  - SEO tags go into public/index.html.
 
   Install (if needed):
     npm i framer-motion react-icons
 */
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { FaLinkedin, FaGithub, FaEnvelope, FaDownload } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes } from "react-icons/fa";
 
 export default function App() {
   const prefersReducedMotion = useReducedMotion();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Reset scroll when landing with no hash
     if (!window.location.hash) window.scrollTo({ top: 0 });
   }, []);
 
@@ -28,7 +27,7 @@ export default function App() {
 
   const Section = ({ id, title, children }) => (
     <motion.section id={id} variants={fadeInUp} className="scroll-mt-24">
-      <h2 className="text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
         {title}
       </h2>
       {children}
@@ -36,51 +35,80 @@ export default function App() {
   );
 
   const Chip = ({ children }) => (
-    <span className="inline-flex items-center rounded-full border border-cyan-700/40 bg-cyan-900/10 px-3 py-1 text-xs md:text-sm text-cyan-200">
+    <span className="inline-flex items-center rounded-full border border-cyan-700/40 bg-cyan-900/10 px-2 sm:px-3 py-1 text-xs md:text-sm text-cyan-200">
       {children}
     </span>
   );
 
+  const navItems = [
+    ["Skills", "#skills"],
+    ["Experience", "#experience"],
+    ["Projects", "#projects"],
+    ["Education", "#education"],
+    ["Contact", "#contact"],
+  ];
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-6 md:p-12">
+    <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
       <motion.div
-        className="max-w-6xl mx-auto space-y-24"
+        className="max-w-6xl mx-auto space-y-16 sm:space-y-24"
         initial="hidden"
         animate="visible"
         variants={prefersReducedMotion ? { visible: { opacity: 1 } } : undefined}
       >
         {/* NAV */}
         <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50">
-          <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
             <a href="#home" className="text-lg font-bold text-cyan-400 tracking-wide">
               Mohammed Alam
             </a>
-            <nav aria-label="Primary" className="text-sm">
+            {/* Desktop nav */}
+            <nav aria-label="Primary" className="hidden md:block text-sm">
               <ul className="flex gap-5">
-                {[
-                  ["Skills", "#skills"],
-                  ["Experience", "#experience"],
-                  ["Projects", "#projects"],
-                  ["Education", "#education"],
-                  ["Contact", "#contact"],
-                ].map(([label, href]) => (
+                {navItems.map(([label, href]) => (
                   <li key={href}>
-                    <a className="hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded" href={href}>
+                    <a className="hover:text-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-500 rounded" href={href}>
                       {label}
                     </a>
                   </li>
                 ))}
               </ul>
             </nav>
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden text-2xl text-cyan-400"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? <FaTimes /> : <FaBars />}
+            </button>
           </div>
+          {/* Mobile menu overlay */}
+          {menuOpen && (
+            <div className="md:hidden bg-black/90 backdrop-blur absolute top-full inset-x-0 p-4">
+              <ul className="flex flex-col gap-4 text-lg">
+                {navItems.map(([label, href]) => (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      className="block hover:text-cyan-400"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </header>
 
         {/* HERO */}
-        <motion.section id="home" className="pt-28 text-center" variants={fadeInUp}>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+        <motion.section id="home" className="pt-24 sm:pt-28 text-center" variants={fadeInUp}>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
             Mohammed Alam
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 mt-3">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3">
             Software Engineer in Test — Automation, CI/CD, and reliable releases
           </p>
           <div className="mt-6 flex flex-col items-center gap-4">
@@ -98,7 +126,7 @@ export default function App() {
             <a
               href="/MohammedAlamResume.pdf"
               download
-              className="inline-flex items-center gap-2 px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition duration-200 hover:bg-gray-200"
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
             >
               <FaDownload className="text-black" /> Download Resume
             </a>
@@ -131,7 +159,6 @@ export default function App() {
               </p>
             </div>
           </div>
-
           <div className="mt-5 flex flex-wrap gap-2">
             {["Playwright", "JMeter", "Robot Framework", "Datadog", "Jenkins", "AWS", "Docker", "Azure DevOps"].map((s) => (
               <Chip key={s}>{s}</Chip>
@@ -190,7 +217,7 @@ export default function App() {
 
         {/* PROJECTS */}
         <Section id="projects" title="Projects">
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-6">
             <ProjectCard
               title="Operating System"
               href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrb"
