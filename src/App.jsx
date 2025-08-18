@@ -24,6 +24,7 @@ export default function App() {
         ([entry]) => {
           if (entry.isIntersecting && !seen) {
             setSeen(true);
+            observer.disconnect();
           }
         },
         { threshold: 0.2 }
