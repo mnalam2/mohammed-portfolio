@@ -1,24 +1,59 @@
 /*
   Mohammed Alam – Portfolio (React, Vite, Tailwind)
   - Mobile friendly with hamburger nav.
-  - Clean, fast, accessible.
-  - SEO tags go into public/index.html.
-
-  Install (if needed):
-    npm i framer-motion react-icons
+  - Scroll-spy, accessible mobile menu (focus trap + Esc), smooth hash updates.
+  - No resume copy edits; only presentation, a11y, and polish.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes } from "react-icons/fa";
 
 export default function App() {
   const prefersReducedMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("#home");
+  const menuRef = useRef(null);
 
+  // Reset scroll when landing without a hash
   useEffect(() => {
     if (!window.location.hash) window.scrollTo({ top: 0 });
   }, []);
+
+  // Scroll spy: highlight nav item + update URL hash without jump
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const hash = `#${e.target.id}`;
+            setActive(hash);
+            if (location.hash !== hash) {
+              history.replaceState(null, "", hash);
+            }
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+    sections.forEach((s) => obs.observe(s));
+    return () => obs.disconnect();
+  }, []);
+
+  // Lock page scroll + trap focus inside the mobile menu; close with Esc
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const firstFocusable = menuRef.current?.querySelector("a,button");
+    firstFocusable?.focus();
+
+    const onKey = (e) => { if (e.key === "Escape") setMenuOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
+  }, [menuOpen]);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -26,8 +61,8 @@ export default function App() {
   };
 
   const Section = ({ id, title, children }) => (
-    <motion.section id={id} variants={fadeInUp} className="scroll-mt-24">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+    <motion.section id={id} aria-labelledby={`${id}-title`} variants={fadeInUp} className="scroll-mt-24">
+      <h2 id={`${id}-title`} className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
         {title}
       </h2>
       {children}
@@ -48,8 +83,19 @@ export default function App() {
     ["Contact", "#contact"],
   ];
 
+  const linkCls = (href) =>
+    `hover:text-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-500 rounded ${active===href ? "text-cyan-400 underline underline-offset-8" : ""}`;
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
+      {/* Skip link for screen readers */}
+      <a
+        href="#home"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] bg-cyan-500 text-black px-3 py-1 rounded"
+      >
+        Skip to content
+      </a>
+
       <motion.div
         className="max-w-6xl mx-auto space-y-16 sm:space-y-24"
         initial="hidden"
@@ -67,7 +113,7 @@ export default function App() {
               <ul className="flex gap-5">
                 {navItems.map(([label, href]) => (
                   <li key={href}>
-                    <a className="hover:text-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-500 rounded" href={href}>
+                    <a className={linkCls(href)} href={href} aria-current={active===href ? "page" : undefined}>
                       {label}
                     </a>
                   </li>
@@ -79,20 +125,23 @@ export default function App() {
               className="md:hidden text-2xl text-cyan-400"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
             >
               {menuOpen ? <FaTimes /> : <FaBars />}
             </button>
           </div>
           {/* Mobile menu overlay */}
           {menuOpen && (
-            <div className="md:hidden bg-black/90 backdrop-blur absolute top-full inset-x-0 p-4">
+            <div id="mobile-menu" ref={menuRef} className="md:hidden bg-black/90 backdrop-blur absolute top-full inset-x-0 p-4">
               <ul className="flex flex-col gap-4 text-lg">
                 {navItems.map(([label, href]) => (
                   <li key={href}>
                     <a
                       href={href}
-                      className="block hover:text-cyan-400"
+                      className={linkCls(href)}
                       onClick={() => setMenuOpen(false)}
+                      aria-current={active===href ? "page" : undefined}
                     >
                       {label}
                     </a>
@@ -271,7 +320,7 @@ function Exp({ role, time, org, bullets }) {
         <span className="text-xs text-gray-400">{time}</span>
       </div>
       <div className="text-sm text-gray-400 mt-0.5">{org}</div>
-      <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
+      <ul className="mt-3 space-y-1.5 text-gray-300 text-sm marker:text-cyan-400 list-disc list-inside">
         {bullets.map((b, i) => (
           <li key={i}>{b}</li>
         ))}
@@ -286,7 +335,7 @@ function ProjectCard({ title, href, desc, tags }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-700/50 hover:shadow-lg transition"
+      className="group block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-700/50 hover:shadow-lg hover:-translate-y-0.5 transition transform"
     >
       <h3 className="text-lg font-semibold text-white group-hover:text-cyan-400">{title}</h3>
       <p className="text-gray-300 text-sm mt-1">{desc}</p>
