@@ -220,7 +220,7 @@ export default function App() {
           <div className="grid sm:grid-cols-2 gap-6">
             <ProjectCard
               title="Operating System"
-              href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrb"
+              href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib"
               desc="Built a teaching OS in x86/C with memory protection, file system, and I/O drivers."
               tags={["C", "x86", "OS"]}
             />
