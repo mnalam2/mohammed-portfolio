@@ -7,6 +7,26 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
 
+function Section({ id, title, children }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  return (
+    <motion.section
+      id={id}
+      ref={ref}
+      className="scroll-mt-24"
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+    >
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+        {title}
+      </h2>
+      {children}
+    </motion.section>
+  );
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -41,26 +61,6 @@ export default function App() {
     });
     return () => observers.forEach((obs) => obs?.disconnect());
   }, []);
-
-  const Section = ({ id, title, children }) => {
-    const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: "-80px" });
-    return (
-      <motion.section
-        id={id}
-        ref={ref}
-        className="scroll-mt-24"
-        variants={fadeUp}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-      >
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-          {title}
-        </h2>
-        {children}
-      </motion.section>
-    );
-  };
 
   const navItems = [
     ["Skills", "#skills", "skills"],
