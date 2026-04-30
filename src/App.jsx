@@ -99,7 +99,7 @@ const EXPERIENCES = [
 const STATS = [
   { end: 40, suffix: "%", label: "Faster Release Cycles",    sublabel: "CI/CD automation at Generali" },
   { end: 50, suffix: "%", label: "Faster Defect Triage",     sublabel: "Datadog observability dashboards" },
-  { end: 5,  suffix: "+", label: "Years Leading Automation", sublabel: "Across finance, health & travel" },
+  { end: 10, suffix: "+", label: "Years Leading Automation", sublabel: "Across finance, health & travel" },
 ];
 
 const PHRASES = [
