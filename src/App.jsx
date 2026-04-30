@@ -333,40 +333,66 @@ export default function App() {
         {/* HERO */}
         <motion.section
           id="home"
-          className="pt-24 sm:pt-28 text-center"
+          className="pt-24 sm:pt-28"
           variants={fadeUp}
           initial="hidden"
           animate="visible"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-            Mohammed Alam
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-400 mt-4 h-7">
-            <span className="text-white">{typed}</span>
-            <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
-          </p>
-          <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl mx-auto">
-            Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
-          </p>
-          <div className="mt-6 flex flex-col items-center gap-4">
-            <div className="flex gap-6 text-2xl">
-              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <FaLinkedin />
-              </a>
-              <a href="https://github.com/mnalam2" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <FaGithub />
-              </a>
-              <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400 transition-colors" aria-label="Email Mohammed">
-                <FaEnvelope />
-              </a>
+          <div className="flex flex-col-reverse sm:flex-row items-center justify-center gap-8 sm:gap-12">
+
+            {/* Text side */}
+            <div className="text-center sm:text-left flex-1 max-w-lg">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                Mohammed Alam
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl text-gray-400 mt-4 h-7">
+                <span className="text-white">{typed}</span>
+                <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
+              </p>
+              <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl">
+                Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
+              </p>
+              <div className="mt-6 flex flex-col items-center sm:items-start gap-4">
+                <div className="flex gap-6 text-2xl">
+                  <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <FaLinkedin />
+                  </a>
+                  <a href="https://github.com/mnalam2" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <FaGithub />
+                  </a>
+                  <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400 transition-colors" aria-label="Email Mohammed">
+                    <FaEnvelope />
+                  </a>
+                </div>
+                <a
+                  href="/MohammedAlamResume.pdf"
+                  download
+                  className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
+                >
+                  <FaDownload className="text-black" /> Download Resume
+                </a>
+              </div>
             </div>
-            <a
-              href="/MohammedAlamResume.pdf"
-              download
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
+
+            {/* Headshot */}
+            <motion.div
+              className="relative flex-shrink-0"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             >
-              <FaDownload className="text-black" /> Download Resume
-            </a>
+              {/* Glow ring */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 blur-lg opacity-30 scale-110" />
+              {/* Border ring */}
+              <div className="relative p-1 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600">
+                <img
+                  src="/IMG_0383.png"
+                  alt="Mohammed Alam"
+                  className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full object-cover object-top bg-gray-800"
+                />
+              </div>
+            </motion.div>
+
           </div>
         </motion.section>
 
