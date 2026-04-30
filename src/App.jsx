@@ -1,11 +1,138 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
+
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+
+function GlitchName() {
+  const [glitch, setGlitch] = useState(false);
+  useEffect(() => {
+    const trigger = () => {
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 200);
+    };
+    const id = setInterval(trigger, 5000);
+    return () => clearInterval(id);
+  }, []);
+
+  const name = "Mohammed Alam";
+  const t = { duration: 0.2, ease: "linear" };
+  const overlayCls = "absolute inset-0 text-4xl sm:text-5xl md:text-6xl font-extrabold select-none pointer-events-none";
+
+  return (
+    <div className="relative inline-block">
+      <motion.span
+        aria-hidden="true"
+        className={`${overlayCls} text-cyan-300`}
+        animate={glitch ? { x: [-3, -4, -2, -3, 0], opacity: [0.75, 0.6, 0.75, 0.5, 0] } : { x: 0, opacity: 0 }}
+        transition={t}
+      >
+        {name}
+      </motion.span>
+      <motion.span
+        aria-hidden="true"
+        className={`${overlayCls} text-pink-400`}
+        animate={glitch ? { x: [3, 4, 2, 3, 0], opacity: [0.75, 0.6, 0.75, 0.5, 0] } : { x: 0, opacity: 0 }}
+        transition={t}
+      >
+        {name}
+      </motion.span>
+      <motion.h1
+        className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600"
+        animate={glitch ? { x: [0, 1, -1, 0] } : { x: 0 }}
+        transition={t}
+      >
+        {name}
+      </motion.h1>
+    </div>
+  );
+}
+
+function ScrambleText({ text, className }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const [displayed, setDisplayed] = useState(text);
+
+  useEffect(() => {
+    if (!inView) return;
+    let iteration = 0;
+    const totalFrames = 22;
+    const timeout = setTimeout(() => {
+      const id = setInterval(() => {
+        setDisplayed(
+          text.split("").map((char, i) => {
+            if (char === " ") return " ";
+            if (i < Math.floor((iteration / totalFrames) * text.length)) return char;
+            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          }).join("")
+        );
+        iteration++;
+        if (iteration > totalFrames) { clearInterval(id); setDisplayed(text); }
+      }, 28);
+      return () => clearInterval(id);
+    }, 280);
+    return () => clearTimeout(timeout);
+  }, [inView, text]);
+
+  return <span ref={ref} className={className}>{displayed}</span>;
+}
+
+function RevealWord({ word, scrollY, index, total }) {
+  const start = 60 + (index / total) * 320;
+  const end = 60 + ((index + 1) / total) * 320;
+  const color = useTransform(scrollY, [start, end], ["#4b5563", "#d1d5db"]);
+  return <motion.span style={{ color }} className="mr-1">{word}</motion.span>;
+}
+
+function WordReveal({ text }) {
+  const { scrollY } = useScroll();
+  const words = text.split(" ");
+  return (
+    <p className="text-sm sm:text-base mt-3 max-w-xl">
+      {words.map((word, i) => (
+        <RevealWord key={i} word={word} scrollY={scrollY} index={i} total={words.length} />
+      ))}
+    </p>
+  );
+}
+
+function MarqueeRow({ skills, direction }) {
+  const doubled = [...skills, ...skills];
+  const duration = skills.length * 2.8;
+  return (
+    <div className="overflow-hidden">
+      <div
+        className="flex gap-2.5 w-max"
+        style={{ animation: `marquee-${direction} ${duration}s linear infinite` }}
+      >
+        {doubled.map((skill, i) => (
+          <span
+            key={i}
+            className="px-3 py-1.5 text-xs bg-gray-800 text-gray-300 rounded-full border border-gray-700 whitespace-nowrap hover:border-cyan-500 hover:text-cyan-400 transition-colors"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SkillsMarquee() {
+  const all = SKILL_GROUPS.flatMap((g) => g.tags);
+  const half = Math.ceil(all.length / 2);
+  return (
+    <div className="space-y-3 -mx-4 sm:-mx-6 md:-mx-12">
+      <MarqueeRow skills={all.slice(0, half)} direction="left" />
+      <MarqueeRow skills={all.slice(half)} direction="right" />
+    </div>
+  );
+}
 
 const NAV_ITEMS = [
   ["Skills", "skills"],
@@ -139,7 +266,7 @@ function Section({ id, title, children }) {
       viewport={{ once: true, amount: 0.1 }}
     >
       <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-        {title}
+        <ScrambleText text={title} />
       </h2>
       {children}
     </motion.section>
@@ -342,16 +469,12 @@ export default function App() {
 
             {/* Text side */}
             <div className="text-center sm:text-left flex-1 max-w-lg">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-                Mohammed Alam
-              </h1>
+              <GlitchName />
               <p className="text-base sm:text-lg md:text-xl text-gray-400 mt-4 h-7">
                 <span className="text-white">{typed}</span>
                 <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
               </p>
-              <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl">
-                Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
-              </p>
+              <WordReveal text="Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast." />
               <div className="mt-6 flex flex-col items-center sm:items-start gap-4">
                 <div className="flex gap-6 text-2xl">
                   <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
@@ -398,23 +521,7 @@ export default function App() {
 
         {/* SKILLS */}
         <Section id="skills" title="Skills">
-          <div className="grid md:grid-cols-2 gap-4">
-            {SKILL_GROUPS.map(({ label, tags }) => (
-              <div key={label} className="rounded-lg border border-gray-800 bg-gray-900/40 p-5">
-                <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-3">{label}</p>
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2.5 py-1 text-xs bg-gray-800 text-gray-300 rounded-full border border-gray-700 hover:border-cyan-500 hover:text-cyan-400 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          <SkillsMarquee />
         </Section>
 
         {/* EXPERIENCE */}
