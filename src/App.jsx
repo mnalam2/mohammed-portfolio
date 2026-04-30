@@ -78,7 +78,7 @@ export default function App() {
             Mohammed Alam
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3">
-            Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
+            Senior Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
           </p>
           <div className="mt-6 flex flex-col items-center gap-4">
             <div className="flex gap-6 text-2xl">
