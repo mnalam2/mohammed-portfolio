@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -96,6 +96,12 @@ const EXPERIENCES = [
   },
 ];
 
+const STATS = [
+  { value: 40, suffix: "%", label: "faster releases" },
+  { value: 50, suffix: "%", label: "faster triage" },
+  { value: 5,  suffix: "+", label: "years leading" },
+];
+
 const PHRASES = [
   "Lead Automation Engineer",
   "Playwright & Robot Framework",
@@ -126,6 +132,70 @@ function useTypewriter(phrases) {
   }, [text, deleting, phraseIdx, phrases]);
 
   return text;
+}
+
+function useCountUp(target, duration = 1800) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const start = performance.now();
+          const step = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target, duration]);
+
+  return [count, ref];
+}
+
+function StatCounter({ value, suffix, label }) {
+  const [count, ref] = useCountUp(value);
+  return (
+    <div ref={ref} className="flex flex-col items-center gap-2 px-2">
+      <span className="text-5xl sm:text-6xl md:text-7xl font-extrabold tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+        {count}{suffix}
+      </span>
+      <span className="text-xs sm:text-sm text-gray-400 uppercase tracking-widest text-center">{label}</span>
+    </div>
+  );
+}
+
+function StatsBar() {
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      className="rounded-2xl border border-gray-800 bg-gray-900/40 py-10 px-4 sm:px-10"
+    >
+      <p className="text-center text-[11px] font-semibold text-cyan-400 uppercase tracking-[0.2em] mb-8">
+        By the Numbers
+      </p>
+      <div className="grid grid-cols-3 divide-x divide-gray-800">
+        {STATS.map((stat) => (
+          <StatCounter key={stat.label} {...stat} />
+        ))}
+      </div>
+    </motion.div>
+  );
 }
 
 function Section({ id, title, children }) {
@@ -395,6 +465,9 @@ export default function App() {
 
           </div>
         </motion.section>
+
+        {/* STATS BAR */}
+        <StatsBar />
 
         {/* SKILLS */}
         <Section id="skills" title="Skills">
