@@ -62,12 +62,17 @@ export default function App() {
     return () => observers.forEach((obs) => obs?.disconnect());
   }, []);
 
+  const scrollTo = (e, id) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const navItems = [
-    ["Skills", "#skills", "skills"],
-    ["Experience", "#experience", "experience"],
-    ["Projects", "#projects", "projects"],
-    ["Education", "#education", "education"],
-    ["Contact", "#contact", "contact"],
+    ["Skills", "skills"],
+    ["Experience", "experience"],
+    ["Projects", "projects"],
+    ["Education", "education"],
+    ["Contact", "contact"],
   ];
 
   const skillGroups = [
@@ -104,15 +109,16 @@ export default function App() {
         {/* NAV */}
         <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-            <a href="#home" className="text-lg font-bold text-cyan-400 tracking-wide">
+            <a href="/" onClick={(e) => scrollTo(e, "home")} className="text-lg font-bold text-cyan-400 tracking-wide">
               Mohammed Alam
             </a>
             <nav aria-label="Primary" className="hidden md:block text-sm">
               <ul className="flex gap-5">
-                {navItems.map(([label, href, id]) => (
-                  <li key={href}>
+                {navItems.map(([label, id]) => (
+                  <li key={id}>
                     <a
-                      href={href}
+                      href={`#${id}`}
+                      onClick={(e) => scrollTo(e, id)}
                       className={`transition-colors focus-visible:ring-2 focus-visible:ring-cyan-500 rounded ${
                         activeSection === id ? "text-cyan-400 font-medium" : "hover:text-cyan-400"
                       }`}
@@ -141,12 +147,12 @@ export default function App() {
                 transition={{ duration: 0.15 }}
               >
                 <ul className="flex flex-col gap-4 text-lg">
-                  {navItems.map(([label, href, id]) => (
-                    <li key={href}>
+                  {navItems.map(([label, id]) => (
+                    <li key={id}>
                       <a
-                        href={href}
+                        href={`#${id}`}
+                        onClick={(e) => { scrollTo(e, id); setMenuOpen(false); }}
                         className={`block hover:text-cyan-400 ${activeSection === id ? "text-cyan-400" : ""}`}
-                        onClick={() => setMenuOpen(false)}
                       >
                         {label}
                       </a>
