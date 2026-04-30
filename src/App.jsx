@@ -7,6 +7,41 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
 };
 
+const NAV_ITEMS = [
+  ["Skills", "skills"],
+  ["Experience", "experience"],
+  ["Projects", "projects"],
+  ["Education", "education"],
+  ["Contact", "contact"],
+];
+
+const SKILL_GROUPS = [
+  {
+    label: "Languages & Frameworks",
+    tags: ["C", "C++", "C#", "Java", "Python", "JavaScript", "Oracle SQL", "MySQL"],
+  },
+  {
+    label: "CI/CD & DevOps",
+    tags: ["Jenkins", "TeamCity", "Octopus Deploy", "Azure DevOps", "Docker"],
+  },
+  {
+    label: "Testing Expertise",
+    tags: ["Component Testing (C#)", "Playwright E2E", "REST API Testing", "CI/CD Automation", "Load Testing"],
+  },
+  {
+    label: "Test Automation Tools",
+    tags: ["Playwright", "Robot Framework", "Selenium", "JMeter", "Postman"],
+  },
+  {
+    label: "Cloud & Monitoring",
+    tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Datadog"],
+  },
+  {
+    label: "Version Control & Collaboration",
+    tags: ["Git", "Bitbucket", "SVN", "Jira", "Confluence", "TestRail", "SFDC"],
+  },
+];
+
 function Section({ id, title, children }) {
   return (
     <motion.section
@@ -34,14 +69,19 @@ export default function App() {
     if (!window.location.hash) window.scrollTo({ top: 0 });
   }, []);
 
-  // Close mobile menu on scroll + show/hide scroll-to-top button
+  // Show/hide scroll-to-top button
   useEffect(() => {
-    const handleScroll = () => {
-      if (menuOpen) setMenuOpen(false);
-      setShowScrollTop(window.scrollY > 400);
-    };
+    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close mobile menu on scroll
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = () => setMenuOpen(false);
+    window.addEventListener("scroll", close, { passive: true, once: true });
+    return () => window.removeEventListener("scroll", close);
   }, [menuOpen]);
 
   // Scroll spy — highlight active nav item
@@ -65,41 +105,6 @@ export default function App() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const navItems = [
-    ["Skills", "skills"],
-    ["Experience", "experience"],
-    ["Projects", "projects"],
-    ["Education", "education"],
-    ["Contact", "contact"],
-  ];
-
-  const skillGroups = [
-    {
-      label: "Languages & Frameworks",
-      tags: ["C", "C++", "C#", "Java", "Python", "JavaScript", "Oracle SQL", "MySQL"],
-    },
-    {
-      label: "CI/CD & DevOps",
-      tags: ["Jenkins", "TeamCity", "Octopus Deploy", "Azure DevOps", "Docker"],
-    },
-    {
-      label: "Testing Expertise",
-      tags: ["Component Testing (C#)", "Playwright E2E", "REST API Testing", "CI/CD Automation", "Load Testing"],
-    },
-    {
-      label: "Test Automation Tools",
-      tags: ["Playwright", "Robot Framework", "Selenium", "JMeter", "Postman"],
-    },
-    {
-      label: "Cloud & Monitoring",
-      tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Datadog"],
-    },
-    {
-      label: "Version Control & Collaboration",
-      tags: ["Git", "Bitbucket", "SVN", "Jira", "Confluence", "TestRail", "SFDC"],
-    },
-  ];
-
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
@@ -112,7 +117,7 @@ export default function App() {
             </a>
             <nav aria-label="Primary" className="hidden md:block text-sm">
               <ul className="flex gap-5">
-                {navItems.map(([label, id]) => (
+                {NAV_ITEMS.map(([label, id]) => (
                   <li key={id}>
                     <a
                       href={`#${id}`}
@@ -145,7 +150,7 @@ export default function App() {
                 transition={{ duration: 0.15 }}
               >
                 <ul className="flex flex-col gap-4 text-lg">
-                  {navItems.map(([label, id]) => (
+                  {NAV_ITEMS.map(([label, id]) => (
                     <li key={id}>
                       <a
                         href={`#${id}`}
@@ -201,7 +206,7 @@ export default function App() {
         {/* SKILLS */}
         <Section id="skills" title="Skills">
           <div className="grid md:grid-cols-2 gap-4">
-            {skillGroups.map(({ label, tags }) => (
+            {SKILL_GROUPS.map(({ label, tags }) => (
               <div key={label} className="rounded-lg border border-gray-800 bg-gray-900/40 p-5">
                 <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-3">{label}</p>
                 <div className="flex flex-wrap gap-2">
