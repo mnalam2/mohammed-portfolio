@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#030712"/>
+      <stop offset="50%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+    <linearGradient id="nameGrad" x1="200" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="30" y="30" width="1140" height="570" rx="8" fill="none" stroke="#1f2937" stroke-width="1.5"/>
+  <rect x="30" y="30" width="220" height="3" rx="2" fill="url(#nameGrad)"/>
+  <text x="600" y="265" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="700" text-anchor="middle" fill="url(#nameGrad)">Mohammed Alam</text>
+  <text x="600" y="345" font-family="system-ui,-apple-system,sans-serif" font-size="32" text-anchor="middle" fill="#d1d5db">Lead Automation Engineer</text>
+  <text x="600" y="415" font-family="system-ui,-apple-system,sans-serif" font-size="22" text-anchor="middle" fill="#6b7280">Playwright · Robot Framework · CI/CD · AWS · Datadog</text>
+  <text x="600" y="548" font-family="system-ui,-apple-system,sans-serif" font-size="18" text-anchor="middle" fill="#22d3ee">mohammednalam.com</text>
+</svg>

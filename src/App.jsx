@@ -42,6 +42,38 @@ const SKILL_GROUPS = [
   },
 ];
 
+const PHRASES = [
+  "Lead Automation Engineer",
+  "Playwright & Robot Framework",
+  "CI/CD · Jenkins · Azure DevOps",
+  "AWS · DynamoDB · Datadog",
+  "Shipping quality software",
+];
+
+function useTypewriter(phrases) {
+  const [text, setText] = useState("");
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const phrase = phrases[phraseIdx];
+    const delay = deleting ? 35 : text === phrase ? 2000 : 65;
+    const t = setTimeout(() => {
+      if (!deleting && text === phrase) {
+        setDeleting(true);
+      } else if (deleting && text === "") {
+        setDeleting(false);
+        setPhraseIdx((i) => (i + 1) % phrases.length);
+      } else {
+        setText(deleting ? phrase.slice(0, text.length - 1) : phrase.slice(0, text.length + 1));
+      }
+    }, delay);
+    return () => clearTimeout(t);
+  }, [text, deleting, phraseIdx, phrases]);
+
+  return text;
+}
+
 function Section({ id, title, children }) {
   return (
     <motion.section
@@ -64,6 +96,9 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [formStatus, setFormStatus] = useState("idle");
+
+  const typed = useTypewriter(PHRASES);
 
   useEffect(() => {
     if (!window.location.hash) window.scrollTo({ top: 0 });
@@ -103,6 +138,20 @@ export default function App() {
   const scrollTo = (e, id) => {
     e.preventDefault();
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(e.target)).toString(),
+      });
+      setFormStatus(res.ok ? "success" : "error");
+    } catch {
+      setFormStatus("error");
+    }
   };
 
   return (
@@ -178,7 +227,11 @@ export default function App() {
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
             Mohammed Alam
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3">
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 mt-4 h-7">
+            <span className="text-white">{typed}</span>
+            <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
+          </p>
+          <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl mx-auto">
             Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
           </p>
           <div className="mt-6 flex flex-col items-center gap-4">
@@ -308,14 +361,59 @@ export default function App() {
 
         {/* CONTACT */}
         <Section id="contact" title="Contact">
-          <div className="text-center space-y-2">
-            <p className="text-gray-300 text-sm">Reach me directly:</p>
-            <p className="text-cyan-400 text-sm">
+          <div className="max-w-lg mx-auto">
+            {formStatus === "success" ? (
+              <div className="text-center py-10">
+                <p className="text-cyan-400 font-medium text-lg">Message sent!</p>
+                <p className="text-gray-400 text-sm mt-1">I'll be in touch soon.</p>
+              </div>
+            ) : (
+              <form
+                name="contact"
+                method="POST"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+                onSubmit={handleSubmit}
+                className="space-y-4"
+              >
+                <input type="hidden" name="form-name" value="contact" />
+                <input type="hidden" name="bot-field" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  required
+                  className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 text-sm transition-colors"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  required
+                  className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 text-sm transition-colors"
+                />
+                <textarea
+                  name="message"
+                  placeholder="Message"
+                  required
+                  rows={4}
+                  className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 text-sm transition-colors resize-none"
+                />
+                {formStatus === "error" && (
+                  <p className="text-red-400 text-xs">Something went wrong — try emailing directly.</p>
+                )}
+                <button
+                  type="submit"
+                  className="w-full py-2.5 bg-cyan-500 hover:bg-cyan-400 text-black font-medium rounded-lg transition-colors text-sm"
+                >
+                  Send Message
+                </button>
+              </form>
+            )}
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-cyan-400 mt-6">
               <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:underline">mohammed.nafi.alam@gmail.com</a>
-            </p>
-            <p className="text-cyan-400 text-sm">
-              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
-            </p>
+              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
           </div>
         </Section>
 
