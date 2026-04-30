@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -97,9 +97,9 @@ const EXPERIENCES = [
 ];
 
 const STATS = [
-  { value: 40, suffix: "%", label: "faster releases" },
-  { value: 50, suffix: "%", label: "faster triage" },
-  { value: 5,  suffix: "+", label: "years leading" },
+  { end: 40, suffix: "%", label: "Faster Release Cycles",    sublabel: "CI/CD automation at Generali" },
+  { end: 50, suffix: "%", label: "Faster Defect Triage",     sublabel: "Datadog observability dashboards" },
+  { end: 5,  suffix: "+", label: "Years Leading Automation", sublabel: "Across finance, health & travel" },
 ];
 
 const PHRASES = [
@@ -134,67 +134,60 @@ function useTypewriter(phrases) {
   return text;
 }
 
-function useCountUp(target, duration = 1800) {
-  const [count, setCount] = useState(0);
+function StatCounter({ end, suffix, label, sublabel, delay = 0 }) {
   const ref = useRef(null);
-  const started = useRef(false);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const count = useMotionValue(0);
+  const display = useTransform(count, (v) => Math.round(v));
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const start = performance.now();
-          const step = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.round(eased * target));
-            if (progress < 1) requestAnimationFrame(step);
-          };
-          requestAnimationFrame(step);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [target, duration]);
+    if (!inView) return;
+    const controls = animate(count, end, {
+      duration: 2.2,
+      delay,
+      ease: [0.16, 1, 0.3, 1],
+    });
+    return controls.stop;
+  }, [inView, count, end, delay]);
 
-  return [count, ref];
-}
-
-function StatCounter({ value, suffix, label }) {
-  const [count, ref] = useCountUp(value);
   return (
-    <div ref={ref} className="flex flex-col items-center gap-2 px-2">
-      <span className="text-5xl sm:text-6xl md:text-7xl font-extrabold tabular-nums text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-        {count}{suffix}
-      </span>
-      <span className="text-xs sm:text-sm text-gray-400 uppercase tracking-widest text-center">{label}</span>
-    </div>
+    <motion.div
+      ref={ref}
+      className="text-center"
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    >
+      <div className="text-6xl sm:text-7xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tabular-nums leading-none">
+        <motion.span>{display}</motion.span>
+        <span>{suffix}</span>
+      </div>
+      <p className="text-white font-semibold mt-3 text-base sm:text-lg">{label}</p>
+      <p className="text-gray-500 text-sm mt-1">{sublabel}</p>
+    </motion.div>
   );
 }
 
-function StatsBar() {
+function StatsSection() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
   return (
-    <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      className="rounded-2xl border border-gray-800 bg-gray-900/40 py-10 px-4 sm:px-10"
-    >
-      <p className="text-center text-[11px] font-semibold text-cyan-400 uppercase tracking-[0.2em] mb-8">
+    <section ref={ref} className="py-20 sm:py-28 border-t border-gray-800/60">
+      <motion.p
+        className="text-xs text-gray-500 uppercase tracking-[0.25em] text-center mb-12"
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6 }}
+      >
         By the Numbers
-      </p>
-      <div className="grid grid-cols-3 divide-x divide-gray-800">
-        {STATS.map((stat) => (
-          <StatCounter key={stat.label} {...stat} />
+      </motion.p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-14 sm:gap-8">
+        {STATS.map((s, i) => (
+          <StatCounter key={s.label} {...s} delay={i * 0.15} />
         ))}
       </div>
-    </motion.div>
+    </section>
   );
 }
 
@@ -466,9 +459,6 @@ export default function App() {
           </div>
         </motion.section>
 
-        {/* STATS BAR */}
-        <StatsBar />
-
         {/* SKILLS */}
         <Section id="skills" title="Skills">
           <div className="grid md:grid-cols-2 gap-4">
@@ -489,6 +479,9 @@ export default function App() {
             ))}
           </div>
         </Section>
+
+        {/* STATS */}
+        <StatsSection />
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Work History">
