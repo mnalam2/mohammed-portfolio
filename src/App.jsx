@@ -1,33 +1,106 @@
-import React, { useEffect, useState } from "react";
-import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes } from "react-icons/fa";
+import React, { useEffect, useState, useRef } from "react";
+import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+};
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     if (!window.location.hash) window.scrollTo({ top: 0 });
   }, []);
 
-  const Section = ({ id, title, children }) => (
-    <section id={id} className="scroll-mt-24">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
+  // Close mobile menu on scroll + show/hide scroll-to-top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (menuOpen) setMenuOpen(false);
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [menuOpen]);
+
+  // Scroll spy — highlight active nav item
+  useEffect(() => {
+    const ids = ["home", "skills", "experience", "projects", "education", "contact"];
+    const observers = ids.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { rootMargin: "-40% 0px -55% 0px" }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((obs) => obs?.disconnect());
+  }, []);
+
+  const Section = ({ id, title, children }) => {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-80px" });
+    return (
+      <motion.section
+        id={id}
+        ref={ref}
+        className="scroll-mt-24"
+        variants={fadeUp}
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+      >
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+          {title}
+        </h2>
+        {children}
+      </motion.section>
+    );
+  };
 
   const navItems = [
-    ["Skills", "#skills"],
-    ["Experience", "#experience"],
-    ["Projects", "#projects"],
-    ["Education", "#education"],
-    ["Contact", "#contact"],
+    ["Skills", "#skills", "skills"],
+    ["Experience", "#experience", "experience"],
+    ["Projects", "#projects", "projects"],
+    ["Education", "#education", "education"],
+    ["Contact", "#contact", "contact"],
+  ];
+
+  const skillGroups = [
+    {
+      label: "Languages & Frameworks",
+      tags: ["C", "C++", "C#", "Java", "Python", "JavaScript", "Oracle SQL", "MySQL"],
+    },
+    {
+      label: "CI/CD & DevOps",
+      tags: ["Jenkins", "TeamCity", "Octopus Deploy", "Azure DevOps", "Docker"],
+    },
+    {
+      label: "Testing Expertise",
+      tags: ["Component Testing (C#)", "Playwright E2E", "REST API Testing", "CI/CD Automation", "Load Testing"],
+    },
+    {
+      label: "Test Automation Tools",
+      tags: ["Playwright", "Robot Framework", "Selenium", "JMeter", "Postman"],
+    },
+    {
+      label: "Cloud & Monitoring",
+      tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Datadog"],
+    },
+    {
+      label: "Version Control & Collaboration",
+      tags: ["Git", "Bitbucket", "SVN", "Jira", "Confluence", "TestRail", "SFDC"],
+    },
   ];
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
+
         {/* NAV */}
         <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
@@ -36,9 +109,14 @@ export default function App() {
             </a>
             <nav aria-label="Primary" className="hidden md:block text-sm">
               <ul className="flex gap-5">
-                {navItems.map(([label, href]) => (
+                {navItems.map(([label, href, id]) => (
                   <li key={href}>
-                    <a className="hover:text-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-500 rounded" href={href}>
+                    <a
+                      href={href}
+                      className={`transition-colors focus-visible:ring-2 focus-visible:ring-cyan-500 rounded ${
+                        activeSection === id ? "text-cyan-400 font-medium" : "hover:text-cyan-400"
+                      }`}
+                    >
                       {label}
                     </a>
                   </li>
@@ -47,48 +125,62 @@ export default function App() {
             </nav>
             <button
               className="md:hidden text-2xl text-cyan-400"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => setMenuOpen((o) => !o)}
               aria-label="Toggle menu"
             >
               {menuOpen ? <FaTimes /> : <FaBars />}
             </button>
           </div>
-          {menuOpen && (
-            <div className="md:hidden bg-black/90 backdrop-blur absolute top-full inset-x-0 p-4">
-              <ul className="flex flex-col gap-4 text-lg">
-                {navItems.map(([label, href]) => (
-                  <li key={href}>
-                    <a
-                      href={href}
-                      className="block hover:text-cyan-400"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                className="md:hidden bg-black/90 backdrop-blur absolute top-full inset-x-0 p-4"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <ul className="flex flex-col gap-4 text-lg">
+                  {navItems.map(([label, href, id]) => (
+                    <li key={href}>
+                      <a
+                        href={href}
+                        className={`block hover:text-cyan-400 ${activeSection === id ? "text-cyan-400" : ""}`}
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </header>
 
         {/* HERO */}
-        <section id="home" className="pt-24 sm:pt-28 text-center">
+        <motion.section
+          id="home"
+          className="pt-24 sm:pt-28 text-center"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+        >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
             Mohammed Alam
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-300 mt-3">
-            Senior Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
+            Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
           </p>
           <div className="mt-6 flex flex-col items-center gap-4">
             <div className="flex gap-6 text-2xl">
-              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                 <FaLinkedin />
               </a>
-              <a href="https://github.com/mnalam2" className="hover:text-cyan-400" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <a href="https://github.com/mnalam2" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <FaGithub />
               </a>
-              <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400" aria-label="Email Mohammed">
+              <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400 transition-colors" aria-label="Email Mohammed">
                 <FaEnvelope />
               </a>
             </div>
@@ -100,28 +192,32 @@ export default function App() {
               <FaDownload className="text-black" /> Download Resume
             </a>
           </div>
-        </section>
+        </motion.section>
 
         {/* SKILLS */}
         <Section id="skills" title="Skills">
-          <div className="grid md:grid-cols-2 gap-6 text-gray-300 text-sm leading-relaxed">
-            <div className="space-y-3">
-              <p><strong>• Languages & Frameworks:</strong> C/C++/C#, Java, Python, JavaScript, Oracle SQL, MySQL</p>
-              <p><strong>• CI/CD & DevOps:</strong> Jenkins, TeamCity, Octopus Deploy, Azure DevOps, Docker</p>
-              <p><strong>• Testing Expertise:</strong> Component testing (C#), End-to-end testing (Playwright, JavaScript), REST API testing, CI/CD automation, Load testing</p>
-            </div>
-            <div className="space-y-3">
-              <p><strong>• Test Automation Tools:</strong> Playwright, Robot Framework, Selenium, JMeter, Postman</p>
-              <p><strong>• Cloud & Monitoring:</strong> AWS (DynamoDB, ECS, SNS, SQS), Datadog</p>
-              <p><strong>• Version Control & Collaboration:</strong> Git, Bitbucket, SVN, Jira, Confluence, TestRail, SFDC</p>
-            </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            {skillGroups.map(({ label, tags }) => (
+              <div key={label} className="rounded-lg border border-gray-800 bg-gray-900/40 p-5">
+                <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-3">{label}</p>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2.5 py-1 text-xs bg-gray-800 text-gray-300 rounded-full border border-gray-700 hover:border-cyan-500 hover:text-cyan-400 transition-colors"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </Section>
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Work History">
           <div className="space-y-8 text-gray-300 text-sm">
-            {/* Keep bullets exactly word for word as resume */}
             <Exp
               role="Lead Automation Engineer"
               time="07/2021 – Current"
@@ -218,6 +314,23 @@ export default function App() {
           © {new Date().getFullYear()} Mohammed Alam. All rights reserved.
         </footer>
       </div>
+
+      {/* SCROLL TO TOP */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-6 right-6 p-3 bg-cyan-500 hover:bg-cyan-400 text-black rounded-full shadow-lg transition-colors z-50"
+            aria-label="Scroll to top"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FaArrowUp />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
