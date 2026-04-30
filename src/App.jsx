@@ -42,6 +42,60 @@ const SKILL_GROUPS = [
   },
 ];
 
+const EXPERIENCES = [
+  {
+    role: "Lead Automation Engineer",
+    time: "07/2021 – Current",
+    org: "Generali Global Assistance – San Diego, CA",
+    bullets: [
+      "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
+      "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
+      "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
+      "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
+      "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
+    ],
+  },
+  {
+    role: "Software QA Engineer II",
+    time: "09/2019 – 07/2021",
+    org: "Green Dot Corporation – La Jolla, CA",
+    bullets: [
+      "Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.",
+      "Developed and maintained C#/.NET automation including component-level testing and API verification.",
+      "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
+      "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
+    ],
+  },
+  {
+    role: "Quality Engineering & Assurance Analyst",
+    time: "06/2018 – 08/2019",
+    org: "Cognizant – Irving, TX",
+    bullets: [
+      "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
+      "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
+      "Validated client backend coding through IBM AS/400 and query testing.",
+    ],
+  },
+  {
+    role: "Software Test Engineer",
+    time: "05/2018 – 06/2018",
+    org: "Abbott – San Diego, CA",
+    bullets: [
+      "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
+      "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
+    ],
+  },
+  {
+    role: "Software QA Intern",
+    time: "05/2016 – 08/2016",
+    org: "United Airlines – Chicago, IL",
+    bullets: [
+      "Automated deployment pipelines and testing using CA Technologies Release Automation.",
+      "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
+    ],
+  },
+];
+
 const PHRASES = [
   "Lead Automation Engineer",
   "Playwright & Robot Framework",
@@ -92,6 +146,56 @@ function Section({ id, title, children }) {
   );
 }
 
+function Timeline() {
+  return (
+    <div className="relative">
+      {/* Track */}
+      <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
+      {/* Animated fill */}
+      <motion.div
+        className="absolute w-px bg-gradient-to-b from-cyan-400 via-blue-500 to-cyan-400 origin-top"
+        style={{ left: "13px", top: "1.25rem", bottom: "1.25rem" }}
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        viewport={{ once: true, amount: 0.05 }}
+        transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+      />
+
+      <div className="space-y-6">
+        {EXPERIENCES.map((exp, i) => (
+          <motion.div
+            key={exp.role}
+            className="flex gap-5"
+            initial={{ opacity: 0, x: -18 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
+          >
+            {/* Dot column */}
+            <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
+              <div className="w-3.5 h-3.5 rounded-full bg-gray-950 border-2 border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)] z-10" />
+            </div>
+
+            {/* Card */}
+            <div className="flex-1 rounded-lg border border-gray-800 bg-gray-900/40 p-5 mb-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
+                <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+              </div>
+              <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
+              <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
+                {exp.bullets.map((b, j) => (
+                  <li key={j}>{b}</li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -104,14 +208,12 @@ export default function App() {
     if (!window.location.hash) window.scrollTo({ top: 0 });
   }, []);
 
-  // Show/hide scroll-to-top button
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on scroll
   useEffect(() => {
     if (!menuOpen) return;
     const close = () => setMenuOpen(false);
@@ -119,7 +221,6 @@ export default function App() {
     return () => window.removeEventListener("scroll", close);
   }, [menuOpen]);
 
-  // Scroll spy — highlight active nav item
   useEffect(() => {
     const ids = ["home", "skills", "experience", "projects", "education", "contact"];
     const observers = ids.map((id) => {
@@ -156,6 +257,19 @@ export default function App() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
+
+      {/* Gradient mesh — radial-gradient, no filter:blur, renders natively on GPU */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-10"
+        style={{
+          background: `
+            radial-gradient(ellipse 65% 45% at 12% 20%, rgba(6,182,212,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse 55% 55% at 88% 65%, rgba(37,99,235,0.09) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 48% 88%, rgba(99,102,241,0.07) 0%, transparent 60%)
+          `,
+        }}
+      />
+
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
 
         {/* NAV */}
@@ -279,59 +393,7 @@ export default function App() {
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Work History">
-          <div className="space-y-8 text-gray-300 text-sm">
-            <Exp
-              role="Lead Automation Engineer"
-              time="07/2021 – Current"
-              org="Generali Global Assistance – San Diego, CA"
-              bullets={[
-                "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
-                "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
-                "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
-                "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
-                "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
-              ]}
-            />
-            <Exp
-              role="Software QA Engineer II"
-              time="09/2019 – 07/2021"
-              org="Green Dot Corporation – La Jolla, CA"
-              bullets={[
-                "Deployed and managed environments through TeamCity, Octopus Deploy, and Azure DevOps.",
-                "Developed and maintained C#/.NET automation including component-level testing and API verification.",
-                "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
-                "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
-              ]}
-            />
-            <Exp
-              role="Quality Engineering & Assurance Analyst"
-              time="06/2018 – 08/2019"
-              org="Cognizant – Irving, TX"
-              bullets={[
-                "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
-                "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
-                "Validated client backend coding through IBM AS/400 and query testing.",
-              ]}
-            />
-            <Exp
-              role="Software Test Engineer"
-              time="05/2018 – 06/2018"
-              org="Abbott – San Diego, CA"
-              bullets={[
-                "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
-                "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
-              ]}
-            />
-            <Exp
-              role="Software QA Intern"
-              time="05/2016 – 08/2016"
-              org="United Airlines – Chicago, IL"
-              bullets={[
-                "Automated deployment pipelines and testing using CA Technologies Release Automation.",
-                "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
-              ]}
-            />
-          </div>
+          <Timeline />
         </Section>
 
         {/* EDUCATION */}
@@ -439,22 +501,5 @@ export default function App() {
         )}
       </AnimatePresence>
     </main>
-  );
-}
-
-function Exp({ role, time, org, bullets }) {
-  return (
-    <div className="rounded-lg border border-gray-800 bg-gray-900/40 p-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-lg font-semibold text-white">{role}</h3>
-        <span className="text-xs text-gray-400">{time}</span>
-      </div>
-      <div className="text-sm text-gray-400 mt-0.5">{org}</div>
-      <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
-        {bullets.map((b, i) => (
-          <li key={i}>{b}</li>
-        ))}
-      </ul>
-    </div>
   );
 }
