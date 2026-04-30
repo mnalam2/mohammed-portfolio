@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -96,6 +96,12 @@ const EXPERIENCES = [
   },
 ];
 
+const STATS = [
+  { end: 40, suffix: "%", label: "Faster Release Cycles",    sublabel: "CI/CD automation at Generali" },
+  { end: 50, suffix: "%", label: "Faster Defect Triage",     sublabel: "Datadog observability dashboards" },
+  { end: 10, suffix: "+", label: "Years Leading Automation", sublabel: "Across finance, health & travel" },
+];
+
 const PHRASES = [
   "Lead Automation Engineer",
   "Playwright & Robot Framework",
@@ -126,6 +132,63 @@ function useTypewriter(phrases) {
   }, [text, deleting, phraseIdx, phrases]);
 
   return text;
+}
+
+function StatCounter({ end, suffix, label, sublabel, delay = 0 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const count = useMotionValue(0);
+  const display = useTransform(count, (v) => Math.round(v));
+
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(count, end, {
+      duration: 2.2,
+      delay,
+      ease: [0.16, 1, 0.3, 1],
+    });
+    return controls.stop;
+  }, [inView, count, end, delay]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className="text-center"
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    >
+      <div className="text-6xl sm:text-7xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tabular-nums leading-none">
+        <motion.span>{display}</motion.span>
+        <span>{suffix}</span>
+      </div>
+      <p className="text-white font-semibold mt-3 text-base sm:text-lg">{label}</p>
+      <p className="text-gray-500 text-sm mt-1">{sublabel}</p>
+    </motion.div>
+  );
+}
+
+function StatsSection() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <section ref={ref} className="py-20 sm:py-28 border-t border-gray-800/60">
+      <motion.p
+        className="text-xs text-gray-500 uppercase tracking-[0.25em] text-center mb-12"
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6 }}
+      >
+        By the Numbers
+      </motion.p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-14 sm:gap-8">
+        {STATS.map((s, i) => (
+          <StatCounter key={s.label} {...s} delay={i * 0.15} />
+        ))}
+      </div>
+    </section>
+  );
 }
 
 function Section({ id, title, children }) {
@@ -416,6 +479,9 @@ export default function App() {
             ))}
           </div>
         </Section>
+
+        {/* STATS */}
+        <StatsSection />
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Work History">
