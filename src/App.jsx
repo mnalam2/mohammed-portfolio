@@ -386,7 +386,7 @@ export default function App() {
               {/* Border ring */}
               <div className="relative p-1 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600">
                 <img
-                  src="/IMG_0383.png"
+                  src="/headshot.jpg"
                   alt="Mohammed Alam"
                   className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full object-cover object-top bg-gray-800"
                 />
