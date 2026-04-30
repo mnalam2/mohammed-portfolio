@@ -258,12 +258,17 @@ export default function App() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
 
-      {/* Gradient mesh background */}
-      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="mesh-blob-1 absolute top-1/4 -left-32 w-[550px] h-[550px] rounded-full bg-cyan-500/[0.07] blur-[120px]" />
-        <div className="mesh-blob-2 absolute top-1/2 -right-32 w-[450px] h-[450px] rounded-full bg-blue-600/[0.07] blur-[100px]" />
-        <div className="mesh-blob-3 absolute -bottom-20 left-1/3 w-[500px] h-[500px] rounded-full bg-indigo-500/[0.06] blur-[110px]" />
-      </div>
+      {/* Gradient mesh — radial-gradient, no filter:blur, renders natively on GPU */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-10"
+        style={{
+          background: `
+            radial-gradient(ellipse 65% 45% at 12% 20%, rgba(6,182,212,0.10) 0%, transparent 60%),
+            radial-gradient(ellipse 55% 55% at 88% 65%, rgba(37,99,235,0.09) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 48% 88%, rgba(99,102,241,0.07) 0%, transparent 60%)
+          `,
+        }}
+      />
 
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
 
