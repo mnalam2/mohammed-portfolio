@@ -11,9 +11,7 @@
     <meta name="color-scheme" content="dark light" />
 
     <!-- Icons -->
-    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Open Graph -->
@@ -21,13 +19,13 @@
     <meta property="og:title" content="Mohammed Alam – Software Engineer in Test" />
     <meta property="og:description" content="Playwright E2E • API automation • CI/CD • Reliable releases" />
     <meta property="og:url" content="https://mohammednalam.com/" />
-    <meta property="og:image" content="https://mohammednalam.com/og.jpg" />
+    <meta property="og:image" content="https://mohammednalam.com/og.svg" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Mohammed Alam – Software Engineer in Test" />
     <meta name="twitter:description" content="Playwright E2E • API automation • CI/CD • Reliable releases" />
-    <meta name="twitter:image" content="https://mohammednalam.com/og.jpg" />
+    <meta name="twitter:image" content="https://mohammednalam.com/og.svg" />
 
     <!-- JSON-LD Person -->
     <script type="application/ld+json">
@@ -46,19 +44,17 @@
       "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Illinois Urbana-Champaign" }
     }
     </script>
-
-    <!-- Performance hints -->
-    <link rel="preload" href="/MohammedAlamResume.pdf" as="document" crossorigin>
-
-    <!-- Smooth scrolling, with respect for reduced motion -->
-    <style>
-      html:focus-within { scroll-behavior: smooth; }
-      @media (prefers-reduced-motion: reduce) { html:focus-within { scroll-behavior: auto; } }
-    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Netlify Forms detection: hidden form mirrors the React contact form fields -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
 
     <!-- Print stylesheet for clean PDF/paper output -->
     <style media="print">
