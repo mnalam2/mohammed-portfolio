@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
-import confetti from "canvas-confetti";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
 import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 
@@ -391,20 +390,6 @@ export default function App() {
     }
   };
 
-  const handleResumeClick = (e) => {
-    e.preventDefault();
-    confetti({
-      particleCount: 120,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ["#22d3ee", "#3b82f6", "#ffffff", "#a5f3fc"],
-    });
-    // Open in new tab so the current page (and confetti) is never unloaded.
-    // iOS Safari ignores the download attribute on PDFs and navigates away,
-    // which kills canvas animations; _blank avoids that on all platforms.
-    window.open("/MohammedAlamResume.pdf", "_blank", "noopener");
-  };
-
   return (
     <>
       <AnimatePresence>
@@ -521,8 +506,7 @@ export default function App() {
                 </div>
                 <a
                   href="/MohammedAlamResume.pdf"
-                  onClick={handleResumeClick}
-                  rel="noopener noreferrer"
+                  download
                   className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
                 >
                   <FaDownload className="text-black" /> Download Resume
