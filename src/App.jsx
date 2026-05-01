@@ -439,7 +439,7 @@ function Timeline() {
   }, []);
 
   return (
-    <div className="md:grid md:grid-cols-2 md:gap-10 md:items-start">
+    <div>
       {/* ── Left: timeline ── */}
       <div className="relative">
         <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
@@ -490,18 +490,6 @@ function Timeline() {
         </div>
       </div>
 
-      {/* ── Right: sticky code window (md+ only) ── */}
-      <div className="hidden md:block sticky top-28 self-start">
-        <p className="text-[11px] text-gray-600 uppercase tracking-[0.2em] font-mono mb-3">
-          // live from this role
-        </p>
-        <CodeWindow
-          key={activeIdx}
-          snippet={EXPERIENCES[activeIdx].code}
-          lang={EXPERIENCES[activeIdx].lang}
-          filename={EXPERIENCES[activeIdx].filename}
-        />
-      </div>
     </div>
   );
 }
