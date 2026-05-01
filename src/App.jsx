@@ -378,6 +378,100 @@ function MatrixLoader({ onDone }) {
   );
 }
 
+function StarField() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const STAR_COUNT = 130;
+    // Mostly white, a few cyan/blue to echo the palette
+    const COLORS = [
+      [255, 255, 255], [255, 255, 255], [255, 255, 255],
+      [167, 243, 252], // cyan-200
+      [147, 197, 253], // blue-300
+    ];
+
+    let stars = [], shooters = [];
+
+    const init = () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: STAR_COUNT }, () => {
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.2 + 0.2,
+          opacity: Math.random() * 0.6 + 0.15,
+          speed:   Math.random() * 0.007 + 0.002,
+          dir: Math.random() > 0.5 ? 1 : -1,
+          color,
+        };
+      });
+      shooters = [];
+    };
+
+    const spawnShooter = () => {
+      const angle = Math.PI / 5 + (Math.random() - 0.5) * 0.35;
+      shooters.push({
+        x: Math.random() * canvas.width * 0.65,
+        y: Math.random() * canvas.height * 0.45,
+        length: 90 + Math.random() * 70,
+        speed:  13  + Math.random() * 8,
+        opacity: 0.85,
+        angle,
+      });
+    };
+
+    init();
+    const shooterTimer = setInterval(() => { if (Math.random() > 0.45) spawnShooter(); }, 3500);
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const s of stars) {
+        s.opacity += s.speed * s.dir;
+        if (s.opacity >= 0.85) { s.opacity = 0.85; s.dir = -1; }
+        if (s.opacity <= 0.08) { s.opacity = 0.08; s.dir =  1; }
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.color[0]},${s.color[1]},${s.color[2]},${s.opacity})`;
+        ctx.fill();
+      }
+
+      for (let i = shooters.length - 1; i >= 0; i--) {
+        const s = shooters[i];
+        const tx = s.x - Math.cos(s.angle) * s.length;
+        const ty = s.y - Math.sin(s.angle) * s.length;
+        const grad = ctx.createLinearGradient(tx, ty, s.x, s.y);
+        grad.addColorStop(0, 'rgba(255,255,255,0)');
+        grad.addColorStop(1, `rgba(255,255,255,${s.opacity})`);
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(s.x, s.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        s.x += Math.cos(s.angle) * s.speed;
+        s.y += Math.sin(s.angle) * s.speed;
+        s.opacity -= 0.022;
+        if (s.opacity <= 0 || s.x > canvas.width || s.y > canvas.height) shooters.splice(i, 1);
+      }
+    };
+
+    const frameTimer = setInterval(draw, 33);
+    window.addEventListener('resize', init);
+    return () => {
+      clearInterval(frameTimer);
+      clearInterval(shooterTimer);
+      window.removeEventListener('resize', init);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />;
+}
+
 export default function App() {
   const [loaderDone, setLoaderDone] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -445,24 +539,36 @@ export default function App() {
         {!loaderDone && <MatrixLoader key="loader" onDone={() => setLoaderDone(true)} />}
       </AnimatePresence>
 
+    <StarField />
+
+    {/* Orbs live outside motion.main so opacity animation on main doesn't trap them in its stacking context */}
+    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+      <div style={{
+        position: 'absolute', left: '-22%', top: '-12%', width: '80%', height: '72%',
+        background: 'radial-gradient(ellipse 65% 45% at 50% 50%, rgba(6,182,212,0.11) 0%, transparent 70%)',
+        animation: 'orb-drift-1 22s ease-in-out infinite',
+      }} />
+      <div style={{
+        position: 'absolute', right: '-22%', top: '30%', width: '76%', height: '80%',
+        background: 'radial-gradient(ellipse 55% 55% at 50% 50%, rgba(37,99,235,0.10) 0%, transparent 70%)',
+        animation: 'orb-drift-2 28s ease-in-out infinite',
+        animationDelay: '-11s',
+      }} />
+      <div style={{
+        position: 'absolute', left: '8%', bottom: '-22%', width: '70%', height: '66%',
+        background: 'radial-gradient(ellipse 50% 40% at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%)',
+        animation: 'orb-drift-3 19s ease-in-out infinite',
+        animationDelay: '-7s',
+      }} />
+    </div>
+
     <motion.main
-      className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12"
+      className="min-h-screen text-white font-sans p-4 sm:p-6 md:p-12"
       initial={{ opacity: 0 }}
       animate={{ opacity: loaderDone ? 1 : 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
+      style={{ position: 'relative', zIndex: 1 }}
     >
-
-      {/* Gradient mesh — radial-gradient, no filter:blur, renders natively on GPU */}
-      <div
-        className="fixed inset-0 pointer-events-none -z-10"
-        style={{
-          background: `
-            radial-gradient(ellipse 65% 45% at 12% 20%, rgba(6,182,212,0.10) 0%, transparent 60%),
-            radial-gradient(ellipse 55% 55% at 88% 65%, rgba(37,99,235,0.09) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 40% at 48% 88%, rgba(99,102,241,0.07) 0%, transparent 60%)
-          `,
-        }}
-      />
 
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
 
