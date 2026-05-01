@@ -285,7 +285,8 @@ function TestSuiteLoader({ onDone }) {
     );
     const done = setTimeout(onDone, LOADER_DONE_AT);
     return () => { timers.forEach(clearTimeout); clearTimeout(done); };
-  }, [onDone]);
+  // onDone is captured once at mount; empty deps prevents re-running when App re-renders
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <motion.div
