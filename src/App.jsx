@@ -399,13 +399,10 @@ export default function App() {
       origin: { y: 0.6 },
       colors: ["#22d3ee", "#3b82f6", "#ffffff", "#a5f3fc"],
     });
-    // Small delay so confetti gets its first rAF before the download fires
-    setTimeout(() => {
-      const a = document.createElement("a");
-      a.href = "/MohammedAlamResume.pdf";
-      a.download = "MohammedAlamResume.pdf";
-      a.click();
-    }, 100);
+    // Open in new tab so the current page (and confetti) is never unloaded.
+    // iOS Safari ignores the download attribute on PDFs and navigates away,
+    // which kills canvas animations; _blank avoids that on all platforms.
+    window.open("/MohammedAlamResume.pdf", "_blank", "noopener");
   };
 
   return (
@@ -525,6 +522,7 @@ export default function App() {
                 <a
                   href="/MohammedAlamResume.pdf"
                   onClick={handleResumeClick}
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
                 >
                   <FaDownload className="text-black" /> Download Resume
