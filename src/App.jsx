@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+import confetti from "canvas-confetti";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
 import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 
@@ -260,7 +261,76 @@ function Timeline() {
   );
 }
 
+const SUITE_LINES = [
+  { text: "> running portfolio test suite...", color: "text-gray-400", delay: 0 },
+  { text: "  ✓ hero.spec.js", badge: "PASS", ms: "42ms", delay: 400 },
+  { text: "  ✓ skills.spec.js", badge: "PASS", ms: "18ms", delay: 750 },
+  { text: "  ✓ experience.spec.js", badge: "PASS", ms: "31ms", delay: 1050 },
+  { text: "  ✓ projects.spec.js", badge: "PASS", ms: "12ms", delay: 1300 },
+  { text: "  ✓ education.spec.js", badge: "PASS", ms: "9ms", delay: 1520 },
+  { text: "  ✓ contact.spec.js", badge: "PASS", ms: "22ms", delay: 1700 },
+  { text: "", delay: 1900 },
+  { text: "  6 passed (134ms)", color: "text-green-400 font-semibold", delay: 1950 },
+  { text: "> All tests passed. Loading portfolio...", color: "text-cyan-400", delay: 2300 },
+];
+
+const LOADER_DONE_AT = 2900;
+
+function TestSuiteLoader({ onDone }) {
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    const timers = SUITE_LINES.map((line, i) =>
+      setTimeout(() => setVisibleCount(i + 1), line.delay)
+    );
+    const done = setTimeout(onDone, LOADER_DONE_AT);
+    return () => { timers.forEach(clearTimeout); clearTimeout(done); };
+  }, [onDone]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-950"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full max-w-lg mx-4 rounded-xl border border-gray-700 bg-gray-900 shadow-2xl overflow-hidden font-mono text-sm">
+        {/* Terminal chrome */}
+        <div className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-800 border-b border-gray-700">
+          <span className="w-3 h-3 rounded-full bg-red-500/80" />
+          <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+          <span className="w-3 h-3 rounded-full bg-green-500/80" />
+          <span className="ml-3 text-xs text-gray-500 tracking-wide">portfolio.test.js</span>
+        </div>
+        {/* Output */}
+        <div className="p-5 space-y-1 min-h-[220px]">
+          {SUITE_LINES.slice(0, visibleCount).map((line, i) => (
+            <div key={i} className="flex items-center gap-2">
+              {line.badge ? (
+                <>
+                  <span className="text-green-400">{line.text}</span>
+                  <span className="ml-auto flex items-center gap-2 shrink-0">
+                    <span className="text-gray-600 text-xs">{line.ms}</span>
+                    <span className="px-1.5 py-0.5 text-xs rounded bg-green-500/20 text-green-400 border border-green-500/30">
+                      {line.badge}
+                    </span>
+                  </span>
+                </>
+              ) : (
+                <span className={line.color ?? "text-gray-500"}>{line.text}</span>
+              )}
+            </div>
+          ))}
+          {visibleCount > 0 && visibleCount < SUITE_LINES.length && (
+            <span className="inline-block w-2 h-4 bg-cyan-400 animate-pulse ml-0.5 align-middle" />
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function App() {
+  const [loaderDone, setLoaderDone] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -320,7 +390,21 @@ export default function App() {
     }
   };
 
+  const fireConfetti = () => {
+    confetti({
+      particleCount: 120,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ["#22d3ee", "#3b82f6", "#ffffff", "#a5f3fc"],
+    });
+  };
+
   return (
+    <>
+      <AnimatePresence>
+        {!loaderDone && <TestSuiteLoader key="loader" onDone={() => setLoaderDone(true)} />}
+      </AnimatePresence>
+
     <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
 
       {/* Gradient mesh — radial-gradient, no filter:blur, renders natively on GPU */}
@@ -432,6 +516,7 @@ export default function App() {
                 <a
                   href="/MohammedAlamResume.pdf"
                   download
+                  onClick={fireConfetti}
                   className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
                 >
                   <FaDownload className="text-black" /> Download Resume
@@ -589,5 +674,6 @@ export default function App() {
         )}
       </AnimatePresence>
     </main>
+    </>
   );
 }
