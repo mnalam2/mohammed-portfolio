@@ -260,116 +260,120 @@ function Timeline() {
   );
 }
 
-const SUITE_LINES = [
-  { text: "> initialising portfolio...", color: "text-gray-400", delay: 0 },
-  { text: "  ✓ hero.spec.js", badge: "PASS", ms: "42ms", delay: 350 },
-  { text: "  ✓ skills.spec.js", badge: "PASS", ms: "18ms", delay: 650 },
-  { text: "  ✓ experience.spec.js", badge: "PASS", ms: "31ms", delay: 920 },
-  { text: "  ✓ projects.spec.js", badge: "PASS", ms: "12ms", delay: 1150 },
-  { text: "  ✓ education.spec.js", badge: "PASS", ms: "9ms", delay: 1360 },
-  { text: "  ✓ contact.spec.js", badge: "PASS", ms: "22ms", delay: 1540 },
-  { text: "", delay: 1720 },
-  { text: "  6 passed (134ms)", color: "text-green-400 font-semibold", delay: 1780 },
-  { text: "> All systems go. Launching portfolio ↗", color: "text-cyan-400 font-semibold", delay: 2100 },
+const MATRIX_CHARS = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾙﾚﾛﾜﾝ0123456789ABCDEF<>{}[]|/\\';
+
+const HACK_LINES = [
+  { text: '> INITIALIZING SECURE CONNECTION...', delay: 600 },
+  { text: '> IDENTITY CONFIRMED: MOHAMMED ALAM', delay: 1100 },
+  { text: '> ROLE: LEAD AUTOMATION ENGINEER', delay: 1550 },
+  { text: '> SYSTEMS: PLAYWRIGHT · JENKINS · AWS', delay: 1950 },
+  { text: '> ALL SYSTEMS ONLINE', delay: 2300 },
+  { text: '> LAUNCHING PORTFOLIO...', delay: 2650, bright: true },
 ];
 
-const SPEC_COUNT = 6;
-const LOADER_DONE_AT = 3200;
+const LOADER_DONE_AT = 3400;
 
-function TestSuiteLoader({ onDone }) {
-  const [visibleCount, setVisibleCount] = useState(0);
+function MatrixLoader({ onDone }) {
+  const canvasRef = useRef(null);
+  const [visibleLines, setVisibleLines] = useState(0);
 
+  // Matrix rain on canvas
   useEffect(() => {
-    const timers = SUITE_LINES.map((line, i) =>
-      setTimeout(() => setVisibleCount(i + 1), line.delay)
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const fontSize = 15;
+
+    const setup = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      return Array.from(
+        { length: Math.floor(canvas.width / fontSize) },
+        () => Math.floor(Math.random() * -(canvas.height / fontSize))
+      );
+    };
+
+    let drops = setup();
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = `${fontSize}px monospace`;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = '#00ff41';
+
+      drops.forEach((y, i) => {
+        const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+        ctx.fillStyle = '#00ff41';
+        ctx.fillText(char, i * fontSize, y * fontSize);
+        if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+    };
+
+    const interval = setInterval(draw, 35);
+    const onResize = () => { drops = setup(); };
+    window.addEventListener('resize', onResize);
+    return () => { clearInterval(interval); window.removeEventListener('resize', onResize); };
+  }, []);
+
+  // Terminal line reveals
+  useEffect(() => {
+    const timers = HACK_LINES.map((line, i) =>
+      setTimeout(() => setVisibleLines(i + 1), line.delay)
     );
     const done = setTimeout(onDone, LOADER_DONE_AT);
     return () => { timers.forEach(clearTimeout); clearTimeout(done); };
-  // onDone is captured once at mount; empty deps prevents re-running when App re-renders
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const passedCount = SUITE_LINES.slice(0, visibleCount).filter((l) => l.badge).length;
-  const progress = Math.round((passedCount / SPEC_COUNT) * 100);
-  const allDone = visibleCount >= SUITE_LINES.length;
+  const allDone = visibleLines >= HACK_LINES.length;
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-gray-950"
-      exit={{ opacity: 0, scale: 1.04 }}
-      transition={{ duration: 0.65, ease: "easeIn" }}
+      className="fixed inset-0 z-[100] bg-black"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.7 }}
     >
-      {/* Name + label */}
-      <motion.div
-        className="text-center select-none"
-        initial={{ opacity: 0, y: -14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45 }}
-      >
-        <p className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tracking-tight">
-          Mohammed Alam
-        </p>
-        <p className="text-[11px] text-gray-500 uppercase tracking-[0.25em] mt-1">Portfolio — Loading</p>
-      </motion.div>
+      {/* Rain canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
       {/* Terminal card */}
-      <motion.div
-        className="w-full max-w-lg mx-4 rounded-xl border border-gray-700 bg-gray-900 shadow-2xl overflow-hidden font-mono text-sm"
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.12 }}
-      >
-        {/* Chrome */}
-        <div className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-800 border-b border-gray-700">
-          <span className="w-3 h-3 rounded-full bg-red-500/80" />
-          <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-          <span className="w-3 h-3 rounded-full bg-green-500/80" />
-          <span className="ml-3 text-xs text-gray-500 tracking-wide">portfolio.test.js</span>
-          <span className="ml-auto text-xs text-gray-600 tabular-nums">{progress}%</span>
-        </div>
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <motion.div
+          className="w-full max-w-lg font-mono text-sm rounded-lg border border-green-500/30 bg-black/80 p-6 backdrop-blur-sm"
+          style={{ boxShadow: '0 0 40px rgba(0,255,65,0.12), 0 0 80px rgba(0,255,65,0.06)' }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.4 }}
+        >
+          {/* Header row */}
+          <div className="flex items-center gap-2 mb-5 pb-3 border-b border-green-500/20">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"
+              style={{ boxShadow: '0 0 6px #00ff41' }} />
+            <span className="text-green-500/50 text-xs tracking-[0.2em] uppercase">Secure Terminal v1.0</span>
+          </div>
 
-        {/* Output */}
-        <div className="p-5 space-y-1 min-h-[220px]">
-          {SUITE_LINES.slice(0, visibleCount).map((line, i) => (
-            <div key={i} className="flex items-center gap-2">
-              {line.badge ? (
-                <>
-                  <span className="text-green-400">{line.text}</span>
-                  <span className="ml-auto flex items-center gap-2 shrink-0">
-                    <span className="text-gray-600 text-xs">{line.ms}</span>
-                    <span className="px-1.5 py-0.5 text-xs rounded bg-green-500/20 text-green-400 border border-green-500/30">
-                      {line.badge}
-                    </span>
-                  </span>
-                </>
-              ) : (
-                <span className={line.color ?? "text-gray-500"}>{line.text}</span>
-              )}
-            </div>
-          ))}
-          {visibleCount > 0 && !allDone && (
-            <span className="inline-block w-2 h-4 bg-cyan-400 animate-pulse ml-0.5 align-middle" />
-          )}
-        </div>
-
-        {/* Progress bar */}
-        <div className="h-1 bg-gray-800">
-          <motion.div
-            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500"
-            initial={{ width: "0%" }}
-            animate={{ width: `${allDone ? 100 : progress}%` }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-          />
-        </div>
-      </motion.div>
-
-      {/* Status hint */}
-      <motion.p
-        className="text-[11px] text-gray-600 tracking-wider"
-        animate={{ opacity: allDone ? 0 : 0.7 }}
-        transition={{ duration: 0.3 }}
-      >
-        Running quality checks…
-      </motion.p>
+          {/* Lines */}
+          <div className="space-y-2">
+            {HACK_LINES.slice(0, visibleLines).map((line, i) => (
+              <div
+                key={i}
+                className={line.bright
+                  ? 'text-green-300 font-bold tracking-wide'
+                  : 'text-green-500'}
+                style={line.bright ? { textShadow: '0 0 8px #00ff41' } : undefined}
+              >
+                {line.text}
+              </div>
+            ))}
+            {visibleLines > 0 && !allDone && (
+              <span
+                className="inline-block w-[9px] h-[1.1em] bg-green-400 align-middle animate-pulse"
+                style={{ boxShadow: '0 0 6px #00ff41' }}
+              />
+            )}
+          </div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -438,7 +442,7 @@ export default function App() {
   return (
     <>
       <AnimatePresence>
-        {!loaderDone && <TestSuiteLoader key="loader" onDone={() => setLoaderDone(true)} />}
+        {!loaderDone && <MatrixLoader key="loader" onDone={() => setLoaderDone(true)} />}
       </AnimatePresence>
 
     <motion.main
