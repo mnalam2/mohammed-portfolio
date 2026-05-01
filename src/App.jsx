@@ -55,6 +55,21 @@ const EXPERIENCES = [
       "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
       "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
     ],
+    lang: "robot",
+    filename: "test_payment_api.robot",
+    code: `*** Settings ***
+Library    RequestsLibrary
+
+*** Test Cases ***
+Validate Payment API Response
+    [Tags]    integration    payments
+    Create Session    api    \${BASE_URL}
+    \${resp}=    POST On Session    api    /payments
+    ...    json={"amount": 99.99}
+    Should Be Equal As Integers
+    ...    \${resp.status_code}    200
+    \${body}=    Set Variable    \${resp.json()}
+    Should Be Equal    \${body}[status]    APPROVED`,
   },
   {
     role: "Software QA Engineer II",
@@ -66,6 +81,23 @@ const EXPERIENCES = [
       "Conducted backend validations on data migrations from Pervasive SQL to MySQL.",
       "Collaborated with cross-functional teams on agile sprints, feature readiness, and regression scope.",
     ],
+    lang: "csharp",
+    filename: "AccountMigrationTests.cs",
+    code: `[TestClass]
+public class AccountMigrationTests
+{
+    [TestMethod]
+    public void VerifyBalanceMigration()
+    {
+        var legacy = LegacyDb.GetAccount("ACC-8821");
+        var mysql  = MySqlDb.GetAccount("ACC-8821");
+
+        Assert.AreEqual(
+            legacy.Balance, mysql.Balance);
+        Assert.AreEqual("ACTIVE", mysql.Status);
+        Console.WriteLine("Verified: " + mysql.Id);
+    }
+}`,
   },
   {
     role: "Quality Engineering & Assurance Analyst",
@@ -76,6 +108,22 @@ const EXPERIENCES = [
       "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
       "Validated client backend coding through IBM AS/400 and query testing.",
     ],
+    lang: "java",
+    filename: "DashboardTest.java",
+    code: `@Test
+public void verifyDashboardLoad() {
+    driver.get(BASE_URL + "/dashboard");
+    WebElement table = wait.until(
+        visibilityOfElementLocated(
+            By.id("client-data-table")
+        )
+    );
+    assertTrue(table.isDisplayed());
+    assertEquals("10",
+        driver.findElement(
+            By.cssSelector(".row-count")
+        ).getText());
+}`,
   },
   {
     role: "Software Test Engineer",
@@ -85,6 +133,18 @@ const EXPERIENCES = [
       "Designed and executed test protocols for USB-connected drug test devices using protocol analyzers.",
       "Validated GUI components and collaborated with developers to resolve issues via JIRA.",
     ],
+    lang: "python",
+    filename: "test_usb_device.py",
+    code: `def test_usb_enumeration():
+    analyzer = ProtocolAnalyzer(port="COM3")
+    device = analyzer.connect()
+
+    assert device.vendor_id == 0x05AC
+    assert device.product_id == 0x1234
+    assert device.status == "READY"
+
+    result = device.send_command(CMD_SELF_TEST)
+    assert result.code == STATUS_OK`,
   },
   {
     role: "Software QA Intern",
@@ -94,6 +154,21 @@ const EXPERIENCES = [
       "Automated deployment pipelines and testing using CA Technologies Release Automation.",
       "Helped modernize www.united.com deployment workflows with Agile automation strategies.",
     ],
+    lang: "javascript",
+    filename: "deploy-pipeline.js",
+    code: `const pipeline = new DeployPipeline({
+  app: "united-web",
+  env: "staging",
+  version: process.env.BUILD_VERSION,
+});
+
+await pipeline
+  .validate()
+  .runSmokeTests()
+  .deploy()
+  .verify();
+
+console.log("Deploy complete ✓");`,
   },
 ];
 
@@ -133,6 +208,142 @@ function useTypewriter(phrases) {
   }, [text, deleting, phraseIdx, phrases]);
 
   return text;
+}
+
+const SYNTAX_RULES = {
+  robot: [
+    { re: /^\*{3}[^*\n]+\*{3}/, cls: "text-yellow-300 font-bold" },
+    { re: /^\[(?:Tags|Documentation|Setup|Teardown)\]/, cls: "text-cyan-300" },
+    { re: /^#[^\n]*/, cls: "text-gray-500 italic" },
+    { re: /\$\{[^}]+\}/, cls: "text-orange-300" },
+    { re: /"[^"]*"/, cls: "text-yellow-200" },
+    { re: /\b(?:Library|Resource|Create Session|POST On Session|Should Be Equal(?: As Integers)?|Set Variable|Log)\b/, cls: "text-blue-300" },
+    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
+  ],
+  csharp: [
+    { re: /\/\/[^\n]*/, cls: "text-gray-500 italic" },
+    { re: /\$?"[^"]*"/, cls: "text-yellow-200" },
+    { re: /\[(?:TestMethod|TestClass|Test)\]/, cls: "text-yellow-300" },
+    { re: /\b(?:public|private|protected|void|var|new|class|using|return|string|int|bool|static|async|await|this|null|true|false)\b/, cls: "text-purple-400" },
+    { re: /\b(?:Assert|Console)\b/, cls: "text-cyan-300" },
+    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
+  ],
+  java: [
+    { re: /\/\/[^\n]*/, cls: "text-gray-500 italic" },
+    { re: /"[^"]*"/, cls: "text-yellow-200" },
+    { re: /@\w+/, cls: "text-yellow-300" },
+    { re: /\b(?:public|private|void|class|import|return|String|int|boolean|new|static|final|null|true|false)\b/, cls: "text-purple-400" },
+    { re: /\b(?:assertTrue|assertEquals|driver|wait|By|WebElement)\b/, cls: "text-cyan-300" },
+    { re: /\b\d+\b/, cls: "text-orange-300" },
+  ],
+  python: [
+    { re: /#[^\n]*/, cls: "text-gray-500 italic" },
+    { re: /"[^"]*"|'[^']*'/, cls: "text-yellow-200" },
+    { re: /\b(?:def|class|import|from|return|assert|if|elif|else|for|in|not|and|or|True|False|None|await|async)\b/, cls: "text-purple-400" },
+    { re: /0x[0-9A-Fa-f]+/, cls: "text-orange-300" },
+    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
+    { re: /\b(?:self|print|len|range)\b/, cls: "text-blue-300" },
+  ],
+  javascript: [
+    { re: /\/\/[^\n]*/, cls: "text-gray-500 italic" },
+    { re: /"[^"]*"|'[^']*'/, cls: "text-yellow-200" },
+    { re: /\b(?:const|let|var|async|await|function|return|new|class|import|export|from|if|else|for|of|in|null|undefined|true|false)\b/, cls: "text-purple-400" },
+    { re: /\b(?:console|process|Promise)\b/, cls: "text-cyan-300" },
+    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
+  ],
+};
+
+function tokenizeLine(line, lang) {
+  const rules = SYNTAX_RULES[lang] || [];
+  const tokens = [];
+  let pos = 0;
+  while (pos < line.length) {
+    let matched = false;
+    for (const { re, cls } of rules) {
+      const m = line.slice(pos).match(re);
+      if (m && m.index === 0) {
+        tokens.push({ text: m[0], cls });
+        pos += m[0].length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      if (tokens.length && tokens[tokens.length - 1].cls === "plain") {
+        tokens[tokens.length - 1].text += line[pos];
+      } else {
+        tokens.push({ text: line[pos], cls: "plain" });
+      }
+      pos++;
+    }
+  }
+  return tokens;
+}
+
+function TokenizedLine({ line, lang }) {
+  return (
+    <>
+      {tokenizeLine(line, lang).map((tok, i) => (
+        <span key={i} className={tok.cls === "plain" ? "text-gray-300" : tok.cls}>{tok.text}</span>
+      ))}
+    </>
+  );
+}
+
+function CodeWindow({ snippet, lang, filename }) {
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    setDisplayed("");
+    let i = 0;
+    let t;
+    const tick = () => {
+      i++;
+      setDisplayed(snippet.slice(0, i));
+      if (i < snippet.length) t = setTimeout(tick, 13);
+    };
+    t = setTimeout(tick, 150);
+    return () => clearTimeout(t);
+  }, [snippet]);
+
+  const lines = displayed.split("\n");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="rounded-lg border border-gray-700/60 bg-gray-950 overflow-hidden"
+      style={{ boxShadow: "0 0 40px rgba(34,211,238,0.07)" }}
+    >
+      <div className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-900/80 border-b border-gray-800">
+        <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+        <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+        <span className="ml-3 text-gray-500 text-[11px] tracking-wide">{filename}</span>
+      </div>
+      <div
+        className="overflow-auto p-4"
+        style={{ maxHeight: "340px", fontFamily: "'Fira Code','Cascadia Code','Consolas',monospace" }}
+      >
+        <div className="text-xs leading-relaxed">
+          {lines.map((line, i) => (
+            <div key={i} className="flex min-h-[1.5em]">
+              <span className="text-gray-700 select-none text-right mr-4 shrink-0" style={{ minWidth: "1.5rem" }}>
+                {i + 1}
+              </span>
+              <span className="whitespace-pre">
+                <TokenizedLine line={line} lang={lang} />
+                {i === lines.length - 1 && displayed.length < snippet.length && (
+                  <span className="inline-block w-[6px] h-[0.9em] bg-cyan-400/80 animate-pulse ml-0.5 align-middle" />
+                )}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
 }
 
 function StatCounter({ end, suffix, label, sublabel, delay = 0 }) {
@@ -211,50 +422,95 @@ function Section({ id, title, children }) {
 }
 
 function Timeline() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    const observers = cardRefs.current.map((el, i) => {
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveIdx(i); },
+        { rootMargin: "-10% 0px -50% 0px" }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((o) => o?.disconnect());
+  }, []);
+
   return (
-    <div className="relative">
-      {/* Track */}
-      <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
-      {/* Animated fill */}
-      <motion.div
-        className="absolute w-px bg-gradient-to-b from-cyan-400 via-blue-500 to-cyan-400 origin-top"
-        style={{ left: "13px", top: "1.25rem", bottom: "1.25rem" }}
-        initial={{ scaleY: 0 }}
-        whileInView={{ scaleY: 1 }}
-        viewport={{ once: true, amount: 0.05 }}
-        transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-      />
-
-      <div className="space-y-6">
-        {EXPERIENCES.map((exp, i) => (
-          <motion.div
-            key={exp.role}
-            className="flex gap-5"
-            initial={{ opacity: 0, x: -18 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
-          >
-            {/* Dot column */}
-            <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
-              <div className="w-3.5 h-3.5 rounded-full bg-gray-950 border-2 border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)] z-10" />
-            </div>
-
-            {/* Card */}
-            <div className="flex-1 rounded-lg border border-gray-800 bg-gray-900/40 p-5 mb-1">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
-                <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+    <div className="md:grid md:grid-cols-2 md:gap-10 md:items-start">
+      {/* ── Left: timeline ── */}
+      <div className="relative">
+        <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
+        <motion.div
+          className="absolute w-px bg-gradient-to-b from-cyan-400 via-blue-500 to-cyan-400 origin-top"
+          style={{ left: "13px", top: "1.25rem", bottom: "1.25rem" }}
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+        />
+        <div className="space-y-6">
+          {EXPERIENCES.map((exp, i) => (
+            <motion.div
+              key={exp.role}
+              ref={(el) => { cardRefs.current[i] = el; }}
+              className="flex flex-col gap-0"
+              initial={{ opacity: 0, x: -18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
+            >
+              <div className="flex gap-5">
+                <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
+                  <div className={`w-3.5 h-3.5 rounded-full bg-gray-950 border-2 z-10 transition-all duration-300 ${
+                    activeIdx === i
+                      ? "border-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.8)]"
+                      : "border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)]"
+                  }`} />
+                </div>
+                <div className={`flex-1 rounded-lg border bg-gray-900/40 p-5 mb-1 transition-all duration-300 ${
+                  activeIdx === i
+                    ? "border-cyan-500/40 shadow-[0_0_24px_rgba(34,211,238,0.07)]"
+                    : "border-gray-800"
+                }`}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
+                    <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+                  </div>
+                  <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
+                  <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
+                    {exp.bullets.map((b, j) => (
+                      <li key={j}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
-              <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
-                {exp.bullets.map((b, j) => (
-                  <li key={j}>{b}</li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        ))}
+
+              {/* Mobile: inline code window below each card */}
+              <div className="md:hidden ml-12 mb-2">
+                <p className="text-[11px] text-gray-600 uppercase tracking-[0.2em] font-mono mb-2">
+                  // live from this role
+                </p>
+                <CodeWindow snippet={exp.code} lang={exp.lang} filename={exp.filename} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Right: sticky code window (md+ only) ── */}
+      <div className="hidden md:block sticky top-28 self-start">
+        <p className="text-[11px] text-gray-600 uppercase tracking-[0.2em] font-mono mb-3">
+          // live from this role
+        </p>
+        <CodeWindow
+          key={activeIdx}
+          snippet={EXPERIENCES[activeIdx].code}
+          lang={EXPERIENCES[activeIdx].lang}
+          filename={EXPERIENCES[activeIdx].filename}
+        />
       </div>
     </div>
   );
