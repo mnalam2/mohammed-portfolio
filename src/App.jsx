@@ -293,13 +293,13 @@ function MatrixLoader({ onDone }) {
     };
 
     let drops = setup();
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.font = `${fontSize}px monospace`;
-      ctx.shadowBlur = 6;
-      ctx.shadowColor = '#00ff41';
 
       drops.forEach((y, i) => {
         const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
