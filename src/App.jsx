@@ -452,17 +452,26 @@ export default function App() {
       transition={{ duration: 0.7, ease: "easeOut" }}
     >
 
-      {/* Gradient mesh — radial-gradient, no filter:blur, renders natively on GPU */}
-      <div
-        className="fixed inset-0 pointer-events-none -z-10"
-        style={{
-          background: `
-            radial-gradient(ellipse 65% 45% at 12% 20%, rgba(6,182,212,0.10) 0%, transparent 60%),
-            radial-gradient(ellipse 55% 55% at 88% 65%, rgba(37,99,235,0.09) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 40% at 48% 88%, rgba(99,102,241,0.07) 0%, transparent 60%)
-          `,
-        }}
-      />
+      {/* Animated gradient orbs — transform-only animation keeps each on its own GPU layer */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div style={{
+          position: 'absolute', left: '-22%', top: '-12%', width: '80%', height: '72%',
+          background: 'radial-gradient(ellipse 65% 45% at 50% 50%, rgba(6,182,212,0.11) 0%, transparent 70%)',
+          animation: 'orb-drift-1 22s ease-in-out infinite',
+        }} />
+        <div style={{
+          position: 'absolute', right: '-22%', top: '30%', width: '76%', height: '80%',
+          background: 'radial-gradient(ellipse 55% 55% at 50% 50%, rgba(37,99,235,0.10) 0%, transparent 70%)',
+          animation: 'orb-drift-2 28s ease-in-out infinite',
+          animationDelay: '-11s',
+        }} />
+        <div style={{
+          position: 'absolute', left: '8%', bottom: '-22%', width: '70%', height: '66%',
+          background: 'radial-gradient(ellipse 50% 40% at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%)',
+          animation: 'orb-drift-3 19s ease-in-out infinite',
+          animationDelay: '-7s',
+        }} />
+      </div>
 
       <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
 
