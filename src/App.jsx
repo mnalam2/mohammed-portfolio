@@ -492,7 +492,7 @@ export default function App() {
         <Section id="education" title="Education">
           <div className="rounded-lg border border-gray-800 bg-gray-900/40 p-5 text-sm text-gray-300">
             <p className="text-white font-semibold">Bachelor of Science: Computer Engineering, 2017</p>
-            <p className="mt-1">University of Illinois At Urbana-Champaign - Champaign, IL</p>
+            <p className="mt-1">University of Illinois At Urbana-Champaign - <span className="whitespace-nowrap">Champaign, IL</span></p>
             <p className="mt-2 text-gray-400">
               Applicable Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
             </p>
