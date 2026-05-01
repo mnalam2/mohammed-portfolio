@@ -261,19 +261,20 @@ function Timeline() {
 }
 
 const SUITE_LINES = [
-  { text: "> running portfolio test suite...", color: "text-gray-400", delay: 0 },
-  { text: "  ✓ hero.spec.js", badge: "PASS", ms: "42ms", delay: 400 },
-  { text: "  ✓ skills.spec.js", badge: "PASS", ms: "18ms", delay: 750 },
-  { text: "  ✓ experience.spec.js", badge: "PASS", ms: "31ms", delay: 1050 },
-  { text: "  ✓ projects.spec.js", badge: "PASS", ms: "12ms", delay: 1300 },
-  { text: "  ✓ education.spec.js", badge: "PASS", ms: "9ms", delay: 1520 },
-  { text: "  ✓ contact.spec.js", badge: "PASS", ms: "22ms", delay: 1700 },
-  { text: "", delay: 1900 },
-  { text: "  6 passed (134ms)", color: "text-green-400 font-semibold", delay: 1950 },
-  { text: "> All tests passed. Loading portfolio...", color: "text-cyan-400", delay: 2300 },
+  { text: "> initialising portfolio...", color: "text-gray-400", delay: 0 },
+  { text: "  ✓ hero.spec.js", badge: "PASS", ms: "42ms", delay: 350 },
+  { text: "  ✓ skills.spec.js", badge: "PASS", ms: "18ms", delay: 650 },
+  { text: "  ✓ experience.spec.js", badge: "PASS", ms: "31ms", delay: 920 },
+  { text: "  ✓ projects.spec.js", badge: "PASS", ms: "12ms", delay: 1150 },
+  { text: "  ✓ education.spec.js", badge: "PASS", ms: "9ms", delay: 1360 },
+  { text: "  ✓ contact.spec.js", badge: "PASS", ms: "22ms", delay: 1540 },
+  { text: "", delay: 1720 },
+  { text: "  6 passed (134ms)", color: "text-green-400 font-semibold", delay: 1780 },
+  { text: "> All systems go. Launching portfolio ↗", color: "text-cyan-400 font-semibold", delay: 2100 },
 ];
 
-const LOADER_DONE_AT = 2900;
+const SPEC_COUNT = 6;
+const LOADER_DONE_AT = 3200;
 
 function TestSuiteLoader({ onDone }) {
   const [visibleCount, setVisibleCount] = useState(0);
@@ -287,20 +288,45 @@ function TestSuiteLoader({ onDone }) {
   // onDone is captured once at mount; empty deps prevents re-running when App re-renders
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const passedCount = SUITE_LINES.slice(0, visibleCount).filter((l) => l.badge).length;
+  const progress = Math.round((passedCount / SPEC_COUNT) * 100);
+  const allDone = visibleCount >= SUITE_LINES.length;
+
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-gray-950"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-gray-950"
+      exit={{ opacity: 0, scale: 1.04 }}
+      transition={{ duration: 0.65, ease: "easeIn" }}
     >
-      <div className="w-full max-w-lg mx-4 rounded-xl border border-gray-700 bg-gray-900 shadow-2xl overflow-hidden font-mono text-sm">
-        {/* Terminal chrome */}
+      {/* Name + label */}
+      <motion.div
+        className="text-center select-none"
+        initial={{ opacity: 0, y: -14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45 }}
+      >
+        <p className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 tracking-tight">
+          Mohammed Alam
+        </p>
+        <p className="text-[11px] text-gray-500 uppercase tracking-[0.25em] mt-1">Portfolio — Loading</p>
+      </motion.div>
+
+      {/* Terminal card */}
+      <motion.div
+        className="w-full max-w-lg mx-4 rounded-xl border border-gray-700 bg-gray-900 shadow-2xl overflow-hidden font-mono text-sm"
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.12 }}
+      >
+        {/* Chrome */}
         <div className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-800 border-b border-gray-700">
           <span className="w-3 h-3 rounded-full bg-red-500/80" />
           <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
           <span className="w-3 h-3 rounded-full bg-green-500/80" />
           <span className="ml-3 text-xs text-gray-500 tracking-wide">portfolio.test.js</span>
+          <span className="ml-auto text-xs text-gray-600 tabular-nums">{progress}%</span>
         </div>
+
         {/* Output */}
         <div className="p-5 space-y-1 min-h-[220px]">
           {SUITE_LINES.slice(0, visibleCount).map((line, i) => (
@@ -320,11 +346,30 @@ function TestSuiteLoader({ onDone }) {
               )}
             </div>
           ))}
-          {visibleCount > 0 && visibleCount < SUITE_LINES.length && (
+          {visibleCount > 0 && !allDone && (
             <span className="inline-block w-2 h-4 bg-cyan-400 animate-pulse ml-0.5 align-middle" />
           )}
         </div>
-      </div>
+
+        {/* Progress bar */}
+        <div className="h-1 bg-gray-800">
+          <motion.div
+            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500"
+            initial={{ width: "0%" }}
+            animate={{ width: `${allDone ? 100 : progress}%` }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Status hint */}
+      <motion.p
+        className="text-[11px] text-gray-600 tracking-wider"
+        animate={{ opacity: allDone ? 0 : 0.7 }}
+        transition={{ duration: 0.3 }}
+      >
+        Running quality checks…
+      </motion.p>
     </motion.div>
   );
 }
@@ -396,7 +441,12 @@ export default function App() {
         {!loaderDone && <TestSuiteLoader key="loader" onDone={() => setLoaderDone(true)} />}
       </AnimatePresence>
 
-    <main className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12">
+    <motion.main
+      className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white font-sans p-4 sm:p-6 md:p-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: loaderDone ? 1 : 0 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
 
       {/* Gradient mesh — radial-gradient, no filter:blur, renders natively on GPU */}
       <div
@@ -663,7 +713,7 @@ export default function App() {
           </motion.button>
         )}
       </AnimatePresence>
-    </main>
+    </motion.main>
     </>
   );
 }
