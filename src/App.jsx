@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
 import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 
@@ -307,12 +308,13 @@ export default function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(new FormData(e.target)).toString(),
-      });
-      setFormStatus(res.ok ? "success" : "error");
+      await emailjs.sendForm(
+        "service_8jo6k7h",
+        "template_0uweoxf",
+        e.target,
+        "-aQbtf3t-VTPboaHm"
+      );
+      setFormStatus("success");
     } catch {
       setFormStatus("error");
     }
@@ -523,15 +525,9 @@ export default function App() {
               </div>
             ) : (
               <form
-                name="contact"
-                method="POST"
-                data-netlify="true"
-                netlify-honeypot="bot-field"
                 onSubmit={handleSubmit}
                 className="space-y-4"
               >
-                <input type="hidden" name="form-name" value="contact" />
-                <input type="hidden" name="bot-field" />
                 <input
                   type="text"
                   name="name"
