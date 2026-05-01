@@ -439,7 +439,7 @@ function Timeline() {
   }, []);
 
   return (
-    <div className="lg:grid lg:grid-cols-2 lg:gap-10 lg:items-start">
+    <div className="md:grid md:grid-cols-2 md:gap-10 md:items-start">
       {/* ── Left: timeline ── */}
       <div className="relative">
         <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
@@ -456,42 +456,52 @@ function Timeline() {
             <motion.div
               key={exp.role}
               ref={(el) => { cardRefs.current[i] = el; }}
-              className="flex gap-5"
+              className="flex flex-col gap-0"
               initial={{ opacity: 0, x: -18 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
             >
-              <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
-                <div className={`w-3.5 h-3.5 rounded-full bg-gray-950 border-2 z-10 transition-all duration-300 ${
-                  activeIdx === i
-                    ? "border-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.8)]"
-                    : "border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)]"
-                }`} />
-              </div>
-              <div className={`flex-1 rounded-lg border bg-gray-900/40 p-5 mb-1 transition-all duration-300 ${
-                activeIdx === i
-                  ? "border-cyan-500/40 shadow-[0_0_24px_rgba(34,211,238,0.07)]"
-                  : "border-gray-800"
-              }`}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
-                  <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+              <div className="flex gap-5">
+                <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
+                  <div className={`w-3.5 h-3.5 rounded-full bg-gray-950 border-2 z-10 transition-all duration-300 ${
+                    activeIdx === i
+                      ? "border-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.8)]"
+                      : "border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)]"
+                  }`} />
                 </div>
-                <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
-                <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
-                  {exp.bullets.map((b, j) => (
-                    <li key={j}>{b}</li>
-                  ))}
-                </ul>
+                <div className={`flex-1 rounded-lg border bg-gray-900/40 p-5 mb-1 transition-all duration-300 ${
+                  activeIdx === i
+                    ? "border-cyan-500/40 shadow-[0_0_24px_rgba(34,211,238,0.07)]"
+                    : "border-gray-800"
+                }`}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
+                    <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+                  </div>
+                  <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
+                  <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
+                    {exp.bullets.map((b, j) => (
+                      <li key={j}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Mobile: inline code window below each card */}
+              <div className="md:hidden ml-12 mb-2">
+                <p className="text-[11px] text-gray-600 uppercase tracking-[0.2em] font-mono mb-2">
+                  // live from this role
+                </p>
+                <CodeWindow snippet={exp.code} lang={exp.lang} filename={exp.filename} />
               </div>
             </motion.div>
           ))}
         </div>
       </div>
 
-      {/* ── Right: sticky code window (desktop only) ── */}
-      <div className="hidden lg:block sticky top-28 self-start">
+      {/* ── Right: sticky code window (md+ only) ── */}
+      <div className="hidden md:block sticky top-28 self-start">
         <p className="text-[11px] text-gray-600 uppercase tracking-[0.2em] font-mono mb-3">
           // live from this role
         </p>
