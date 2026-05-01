@@ -378,93 +378,94 @@ function MatrixLoader({ onDone }) {
   );
 }
 
-function StarField() {
+function DotGrid() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const STAR_COUNT = 130;
-    // Mostly white, a few cyan/blue to echo the palette
-    const COLORS = [
-      [255, 255, 255], [255, 255, 255], [255, 255, 255],
-      [167, 243, 252], // cyan-200
-      [147, 197, 253], // blue-300
-    ];
 
-    let stars = [], shooters = [];
+    const SPACING   = 34;
+    const DOT_R     = 1.1;
+    const BASE_OP   = 0.18;
+    const WAVE_BAND = 30;   // px width of the illuminated ring
+    const WAVE_SPD  = 110;  // px per second
+    // Dot base: white. Wave peak: cyan-400
+    const BASE_RGB  = [255, 255, 255];
+    const WAVE_RGB  = [34,  211, 238];
+
+    let dots = [], waves = [], rafId, lastTime;
 
     const init = () => {
       canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
-      stars = Array.from({ length: STAR_COUNT }, () => {
-        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-        return {
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 1.2 + 0.2,
-          opacity: Math.random() * 0.6 + 0.15,
-          speed:   Math.random() * 0.007 + 0.002,
-          dir: Math.random() > 0.5 ? 1 : -1,
-          color,
-        };
-      });
-      shooters = [];
+      const cols   = Math.ceil(canvas.width  / SPACING) + 1;
+      const rows   = Math.ceil(canvas.height / SPACING) + 1;
+      const offX   = (canvas.width  % SPACING) / 2;
+      const offY   = (canvas.height % SPACING) / 2;
+      dots = [];
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+          dots.push({ x: offX + c * SPACING, y: offY + r * SPACING });
+      waves = [];
     };
 
-    const spawnShooter = () => {
-      const angle = Math.PI / 5 + (Math.random() - 0.5) * 0.35;
-      shooters.push({
-        x: Math.random() * canvas.width * 0.65,
-        y: Math.random() * canvas.height * 0.45,
-        length: 90 + Math.random() * 70,
-        speed:  13  + Math.random() * 8,
-        opacity: 0.85,
-        angle,
-      });
-    };
+    const spawnWave = () => waves.push({
+      x: canvas.width  * (0.15 + Math.random() * 0.7),
+      y: canvas.height * (0.15 + Math.random() * 0.7),
+      radius: 0,
+    });
 
     init();
-    const shooterTimer = setInterval(() => { if (Math.random() > 0.45) spawnShooter(); }, 3500);
+    setTimeout(spawnWave, 400);
+    const waveTimer = setInterval(spawnWave, 3800);
 
-    const draw = () => {
+    const maxR = () => Math.hypot(canvas.width, canvas.height);
+
+    const loop = (now) => {
+      const dt  = Math.min((now - (lastTime ?? now)) / 1000, 0.05);
+      lastTime  = now;
+
+      const max = maxR();
+      waves     = waves.filter(w => w.radius < max + WAVE_BAND);
+      for (const w of waves) w.radius += WAVE_SPD * dt;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (const s of stars) {
-        s.opacity += s.speed * s.dir;
-        if (s.opacity >= 0.85) { s.opacity = 0.85; s.dir = -1; }
-        if (s.opacity <= 0.08) { s.opacity = 0.08; s.dir =  1; }
+      for (const d of dots) {
+        let peak = 0;
+        for (const w of waves) {
+          const dist = Math.hypot(d.x - w.x, d.y - w.y);
+          const diff = Math.abs(dist - w.radius);
+          if (diff < WAVE_BAND) {
+            // smooth bell curve across the band
+            const t = 1 - diff / WAVE_BAND;
+            // fade wave out as it expands
+            const fade = Math.max(0, 1 - w.radius / max);
+            peak = Math.max(peak, t * t * fade);
+          }
+        }
+
+        const r  = Math.round(BASE_RGB[0] + (WAVE_RGB[0] - BASE_RGB[0]) * peak);
+        const g  = Math.round(BASE_RGB[1] + (WAVE_RGB[1] - BASE_RGB[1]) * peak);
+        const b  = Math.round(BASE_RGB[2] + (WAVE_RGB[2] - BASE_RGB[2]) * peak);
+        const op = BASE_OP + peak * 0.62;
+        const r2 = DOT_R  + peak * 0.7;
+
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${s.color[0]},${s.color[1]},${s.color[2]},${s.opacity})`;
+        ctx.arc(d.x, d.y, r2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${op})`;
         ctx.fill();
       }
 
-      for (let i = shooters.length - 1; i >= 0; i--) {
-        const s = shooters[i];
-        const tx = s.x - Math.cos(s.angle) * s.length;
-        const ty = s.y - Math.sin(s.angle) * s.length;
-        const grad = ctx.createLinearGradient(tx, ty, s.x, s.y);
-        grad.addColorStop(0, 'rgba(255,255,255,0)');
-        grad.addColorStop(1, `rgba(255,255,255,${s.opacity})`);
-        ctx.beginPath();
-        ctx.moveTo(tx, ty);
-        ctx.lineTo(s.x, s.y);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        s.x += Math.cos(s.angle) * s.speed;
-        s.y += Math.sin(s.angle) * s.speed;
-        s.opacity -= 0.022;
-        if (s.opacity <= 0 || s.x > canvas.width || s.y > canvas.height) shooters.splice(i, 1);
-      }
+      rafId = requestAnimationFrame(loop);
     };
 
-    const frameTimer = setInterval(draw, 33);
+    rafId = requestAnimationFrame(loop);
     window.addEventListener('resize', init);
     return () => {
-      clearInterval(frameTimer);
-      clearInterval(shooterTimer);
+      cancelAnimationFrame(rafId);
+      clearInterval(waveTimer);
       window.removeEventListener('resize', init);
     };
   }, []);
@@ -539,7 +540,7 @@ export default function App() {
         {!loaderDone && <MatrixLoader key="loader" onDone={() => setLoaderDone(true)} />}
       </AnimatePresence>
 
-    <StarField />
+    <DotGrid />
 
     {/* Orbs live outside motion.main so opacity animation on main doesn't trap them in its stacking context */}
     <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
