@@ -411,10 +411,11 @@ export default function CareerWalk({ onClose }) {
     return () => window.removeEventListener('keydown', fn);
   }, [onClose]);
 
-  // Auto-walk to a career stop (used by quick-nav)
+  // Instant teleport to a career stop (used by quick-nav)
   const walkTo = useCallback((worldX) => {
-    stateRef.current.targetX    = Math.max(80, Math.min(WORLD_W - 300, worldX));
-    stateRef.current.touchZone  = null;
+    stateRef.current.playerX   = Math.max(80, Math.min(WORLD_W - 300, worldX));
+    stateRef.current.targetX   = null;
+    stateRef.current.touchZone = null;
     stateRef.current.keys.clear();
     setShowHint(false);
   }, []);
@@ -724,7 +725,7 @@ export default function CareerWalk({ onClose }) {
       >
         {/* Label */}
         <p className="text-center text-[9px] text-gray-600 font-mono tracking-widest pt-1.5 pb-0 uppercase">
-          {isTouch ? 'Tap to jump' : 'Click to jump'}
+          Quick Nav
         </p>
 
         {/* Scrollable stop buttons */}
