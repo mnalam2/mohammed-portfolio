@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
 import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
+import CareerWalk from "./CareerWalk";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -713,6 +714,7 @@ export default function App() {
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [formStatus, setFormStatus] = useState("idle");
+  const [careerWalkOpen, setCareerWalkOpen] = useState(false);
 
   const typed = useTypewriter(PHRASES);
 
@@ -772,6 +774,9 @@ export default function App() {
     <>
       <AnimatePresence>
         {!loaderDone && <MatrixLoader key="loader" onDone={() => setLoaderDone(true)} />}
+        {careerWalkOpen && (
+          <CareerWalk key="career-walk" onClose={() => setCareerWalkOpen(false)} />
+        )}
       </AnimatePresence>
 
     <DotGrid />
@@ -957,6 +962,20 @@ export default function App() {
 
         {/* EXPERIENCE */}
         <Section id="experience" title="Work History">
+          <div className="mb-6">
+            <button
+              onClick={() => setCareerWalkOpen(true)}
+              className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-400 text-sm font-mono hover:bg-cyan-500/20 hover:border-cyan-400 transition-all"
+              style={{ boxShadow: '0 0 20px rgba(34,211,238,0.08)' }}
+            >
+              <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:animate-ping" />
+              Enter Career Walk
+              <span className="text-xs text-cyan-600 group-hover:text-cyan-400 transition-colors">▶</span>
+            </button>
+            <p className="text-gray-600 text-xs mt-2 ml-1 font-mono">
+              Interactive side-scroller — walk through each role
+            </p>
+          </div>
           <Timeline />
         </Section>
 
