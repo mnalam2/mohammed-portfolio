@@ -439,6 +439,7 @@ export default function CareerWalk({ onClose }) {
   }, []);
 
   const onPointerMove = useCallback((e) => {
+    e.preventDefault();
     if (e.pointerType !== 'touch') return;
     const rect = e.currentTarget.getBoundingClientRect();
     const relX  = (e.clientX - rect.left) / rect.width;
@@ -575,7 +576,8 @@ export default function CareerWalk({ onClose }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[200] flex flex-col bg-[#010b14]"
+      className="fixed inset-0 z-[200] flex flex-col bg-[#010b14] select-none"
+      style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -602,12 +604,13 @@ export default function CareerWalk({ onClose }) {
         <canvas
           ref={canvasRef}
           className="w-full h-full block"
-          style={{ touchAction: 'none', cursor: 'crosshair' }}
+          style={{ touchAction: 'none', cursor: 'crosshair', WebkitTouchCallout: 'none' }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerLeave={onPointerUp}
           onPointerCancel={onPointerUp}
+          onContextMenu={(e) => e.preventDefault()}
         />
 
         {/* ── Hint overlay ───────────────────────────────────────────────────── */}
