@@ -319,14 +319,16 @@ export default function PipelineSimulator({ onClose }) {
         style={{ scrollbarWidth: 'thin', scrollbarColor: '#1e293b transparent' }}
       >
         {phase === 'idle' ? (
-          <div className="h-full flex flex-col items-center justify-center gap-3 text-center pointer-events-none">
-            <div
-              className="w-14 h-14 rounded-full border border-gray-800 flex items-center justify-center text-2xl text-gray-700"
+          <div className="h-full flex flex-col items-center justify-center gap-3 text-center">
+            <button
+              onClick={run}
+              className="w-16 h-16 rounded-full border border-gray-700 hover:border-cyan-500 flex items-center justify-center text-2xl text-gray-600 hover:text-cyan-400 transition-all active:scale-95"
               style={{ boxShadow: '0 0 30px rgba(34,211,238,0.04)' }}
+              aria-label="Run pipeline"
             >
               ▶
-            </div>
-            <p className="text-gray-500 text-sm">Ready to run</p>
+            </button>
+            <p className="text-gray-500 text-sm">Tap to run</p>
             <p className="text-gray-700 text-xs">
               {STAGES.length} stages · ~{estSec}s estimated
             </p>
@@ -386,7 +388,10 @@ export default function PipelineSimulator({ onClose }) {
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────────── */}
-      <div className="shrink-0 flex items-center justify-between px-4 py-2.5 border-t border-gray-900 bg-black/50">
+      <div
+        className="shrink-0 flex items-center justify-between px-4 py-2.5 border-t border-gray-900 bg-black/50"
+        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
+      >
         <div className="flex items-center gap-2.5">
           <div className="w-24 sm:w-40 h-[3px] rounded-full bg-gray-800 overflow-hidden">
             <motion.div
