@@ -3,6 +3,7 @@ import emailjs from "@emailjs/browser";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
 import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 import CareerWalk from "./CareerWalk";
+import PipelineSimulator from "./PipelineSimulator";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -715,6 +716,7 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [formStatus, setFormStatus] = useState("idle");
   const [careerWalkOpen, setCareerWalkOpen] = useState(false);
+  const [pipelineOpen, setPipelineOpen] = useState(false);
 
   const typed = useTypewriter(PHRASES);
 
@@ -776,6 +778,9 @@ export default function App() {
         {!loaderDone && <MatrixLoader key="loader" onDone={() => setLoaderDone(true)} />}
         {careerWalkOpen && (
           <CareerWalk key="career-walk" onClose={() => setCareerWalkOpen(false)} />
+        )}
+        {pipelineOpen && (
+          <PipelineSimulator key="pipeline" onClose={() => setPipelineOpen(false)} />
         )}
       </AnimatePresence>
 
@@ -993,6 +998,36 @@ export default function App() {
         {/* PROJECTS */}
         <Section id="projects" title="Projects">
           <div className="grid gap-6 md:grid-cols-2">
+            {/* Pipeline demo — featured interactive card */}
+            <button
+              onClick={() => setPipelineOpen(true)}
+              className="md:col-span-2 rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition text-left w-full group relative overflow-hidden"
+            >
+              {/* subtle glow sweep on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(34,211,238,0.06) 0%, transparent 70%)' }} />
+              <div className="relative">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h3 className="text-cyan-400 font-semibold group-hover:text-cyan-300 transition-colors">
+                    Live CI/CD Pipeline Demo
+                  </h3>
+                  <span className="shrink-0 text-[10px] font-mono text-cyan-500 border border-cyan-500/30 rounded-full px-2.5 py-0.5 bg-cyan-500/5">
+                    ▶ Interactive
+                  </span>
+                </div>
+                <p className="text-sm text-gray-300">
+                  Watch a full pipeline execute live — 8 stages from checkout to smoke tests, with streaming logs and real tooling.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {['Robot Framework', 'Jenkins', 'AWS ECS', 'Docker', 'Playwright', 'Datadog'].map((t) => (
+                    <span key={t} className="text-[10px] font-mono text-gray-600 border border-gray-800 rounded px-1.5 py-0.5 bg-gray-900">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </button>
+
             <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition">
               <h3 className="text-cyan-400 font-semibold">Operating System Project ↗</h3>
               <p className="mt-2 text-sm text-gray-300">Developed a full OS in x86/C with memory protection, file system, and I/O drivers.</p>
