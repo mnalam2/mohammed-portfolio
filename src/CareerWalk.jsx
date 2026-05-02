@@ -119,7 +119,7 @@ function drawClouds(ctx, clouds, camX, W) {
     const sx = ((c.x - camX * 0.45) % W + W) % W;
     ctx.beginPath();
     ctx.ellipse(sx, c.y, c.rx, c.ry, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(14,116,144,0.13)';
+    ctx.fillStyle = 'rgba(14,116,144,0.07)';
     ctx.fill();
   }
 }
@@ -473,11 +473,11 @@ export default function CareerWalk({ onClose }) {
         speed: Math.random() * 0.6 + 0.2,
         phase: Math.random() * Math.PI * 2,
       }));
-      g.clouds = Array.from({ length: 10 }, () => ({
+      g.clouds = Array.from({ length: 7 }, () => ({
         x:  200 + Math.random() * (WORLD_W - 400),
-        y:  30  + Math.random() * cssH * 0.28,
-        rx: 55  + Math.random() * 90,
-        ry: 18  + Math.random() * 20,
+        y:  30  + Math.random() * cssH * 0.22,
+        rx: 30  + Math.random() * 55,
+        ry: 10  + Math.random() * 12,
       }));
     };
 
@@ -673,7 +673,7 @@ export default function CareerWalk({ onClose }) {
           {nearStop && (
             <motion.div
               key={nearStop.id}
-              className="absolute bottom-3 left-1/2 -translate-x-1/2 w-full max-w-lg px-3 pointer-events-none"
+              className="absolute bottom-3 left-3 right-3 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[480px] pointer-events-none"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 14 }}
@@ -705,9 +705,9 @@ export default function CareerWalk({ onClose }) {
                 {/* Bullets */}
                 <ul className="mt-3 space-y-1.5">
                   {nearStop.bullets.map((b, i) => (
-                    <li key={i} className="flex gap-2 text-xs text-gray-300 leading-snug">
+                    <li key={i} className="flex gap-2 text-xs text-gray-300 leading-snug break-words min-w-0">
                       <span className="shrink-0 mt-0.5" style={{ color: nearStop.accent }}>›</span>
-                      {b}
+                      <span className="min-w-0 break-words">{b}</span>
                     </li>
                   ))}
                 </ul>
