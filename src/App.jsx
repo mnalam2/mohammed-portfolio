@@ -1046,9 +1046,9 @@ export default function App() {
               </div>
             </button>
 
-            <a href="https://github.com/mnalam2/OperatingSystem/tree/master/student-distrib" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition">
-              <h3 className="text-cyan-400 font-semibold">Operating System Project ↗</h3>
-              <p className="mt-2 text-sm text-gray-300">Developed a full OS in x86/C with memory protection, file system, and I/O drivers.</p>
+            <a href="https://github.com/mnalam2/mohammed-portfolio" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition">
+              <h3 className="text-cyan-400 font-semibold">Personal Portfolio Website ↗</h3>
+              <p className="mt-2 text-sm text-gray-300">Built with React, Tailwind CSS, and Framer Motion; features a live CI/CD pipeline simulator, animated career walk, and real-time contact form integration.</p>
             </a>
             <a href="https://github.com/mnalam2/Artificial-Intelligence-Projects" target="_blank" rel="noopener noreferrer" className="block rounded-lg border border-gray-800 bg-gray-900/40 p-5 hover:border-cyan-400 hover:shadow-lg transition">
               <h3 className="text-cyan-400 font-semibold">AI Projects ↗</h3>
