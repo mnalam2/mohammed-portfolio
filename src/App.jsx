@@ -182,7 +182,7 @@ const STATS = [
 
 const PHRASES = [
   "Lead Automation Engineer",
-  "Playwright & Robot Framework",
+  "Backend & API Automation",
   "CI/CD · Jenkins · Azure DevOps",
   "AWS · DynamoDB · Datadog",
   "Shipping quality software",
@@ -502,7 +502,7 @@ const HACK_LINES = [
   { text: '> INITIALIZING SECURE CONNECTION...', delay: 600 },
   { text: '> IDENTITY CONFIRMED: MOHAMMED ALAM', delay: 1100 },
   { text: '> ROLE: LEAD AUTOMATION ENGINEER', delay: 1550 },
-  { text: '> SYSTEMS: PLAYWRIGHT · JENKINS · AWS', delay: 1950 },
+  { text: '> SYSTEMS: CI/CD · DATADOG · AWS', delay: 1950 },
   { text: '> ALL SYSTEMS ONLINE', delay: 2300 },
   { text: '> LAUNCHING PORTFOLIO...', delay: 2650, bright: true },
 ];
