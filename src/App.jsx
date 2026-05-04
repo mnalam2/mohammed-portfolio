@@ -419,9 +419,14 @@ function BeamReveal({ children }) {
         if (!entry.isIntersecting) return;
         obs.disconnect();
         const beam = document.createElement('div');
-        beam.style.cssText = 'position:absolute;left:0;right:0;top:-80px;height:80px;z-index:10;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(34,211,238,0.6) 45%,rgba(34,211,238,0.2) 60%,transparent);animation:beam-scan 0.8s cubic-bezier(0.4,0,0.2,1) forwards';
+        // Start above the section (clipped by overflow:hidden)
+        beam.style.cssText = 'position:absolute;left:0;right:0;top:0;height:80px;z-index:10;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(34,211,238,0.6) 45%,rgba(34,211,238,0.2) 60%,transparent);transform:translateY(-80px)';
         el.appendChild(beam);
-        setTimeout(() => { if (beam.parentNode) beam.remove(); }, 900);
+        // Force reflow so the browser commits the start position before transitioning
+        beam.getBoundingClientRect();
+        beam.style.transition = 'transform 0.9s cubic-bezier(0.4,0,0.2,1)';
+        beam.style.transform = `translateY(${el.offsetHeight}px)`;
+        setTimeout(() => { if (beam.parentNode) beam.remove(); }, 1000);
       }, { threshold: 0.1 });
       obs.observe(el);
     }, LOADER_DONE_AT + 800);
