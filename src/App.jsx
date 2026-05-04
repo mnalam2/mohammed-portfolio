@@ -405,21 +405,58 @@ function StatsSection() {
   );
 }
 
+function BeamReveal({ children }) {
+  const ref = useRef(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setActive(true); obs.disconnect(); } },
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="relative overflow-hidden">
+      {active && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 z-10 pointer-events-none"
+          style={{
+            top: '-80px',
+            height: '80px',
+            background: 'linear-gradient(to bottom, transparent, rgba(34,211,238,0.55) 45%, rgba(34,211,238,0.18) 60%, transparent)',
+            animation: 'beam-scan 0.7s cubic-bezier(0.4,0,0.2,1) forwards',
+          }}
+        />
+      )}
+      <div
+        style={{
+          opacity: active ? 1 : 0,
+          transform: active ? 'translateY(0)' : 'translateY(10px)',
+          transition: active ? 'opacity 0.5s ease 0.05s, transform 0.5s ease 0.05s' : 'none',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Section({ id, title, children }) {
   return (
-    <motion.section
-      id={id}
-      className="scroll-mt-24"
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-    >
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-        {title}
-      </h2>
-      {children}
-    </motion.section>
+    <section id={id} className="scroll-mt-24">
+      <BeamReveal>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+          {title}
+        </h2>
+        {children}
+      </BeamReveal>
+    </section>
   );
 }
 
