@@ -407,40 +407,31 @@ function StatsSection() {
 
 function BeamReveal({ children }) {
   const ref = useRef(null);
-  const [active, setActive] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setActive(true); obs.disconnect(); } },
-      { threshold: 0.05 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+    let obs;
+    // Delay until loader + fade-in are fully done so the beam isn't
+    // consumed invisibly while the matrix screen is still showing.
+    const timer = setTimeout(() => {
+      const el = ref.current;
+      if (!el) return;
+      obs = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        obs.disconnect();
+        const beam = document.createElement('div');
+        beam.style.cssText = 'position:absolute;left:0;right:0;top:-80px;height:80px;z-index:10;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(34,211,238,0.6) 45%,rgba(34,211,238,0.2) 60%,transparent);animation:beam-scan 0.8s cubic-bezier(0.4,0,0.2,1) forwards';
+        el.appendChild(beam);
+        setTimeout(() => { if (beam.parentNode) beam.remove(); }, 900);
+      }, { threshold: 0.1 });
+      obs.observe(el);
+    }, LOADER_DONE_AT + 800);
+
+    return () => { clearTimeout(timer); obs?.disconnect(); };
   }, []);
 
   return (
     <div ref={ref} className="relative overflow-hidden">
-      {active && (
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 z-10 pointer-events-none"
-          style={{
-            top: '-80px',
-            height: '80px',
-            background: 'linear-gradient(to bottom, transparent, rgba(34,211,238,0.55) 45%, rgba(34,211,238,0.18) 60%, transparent)',
-            animation: 'beam-scan 0.7s cubic-bezier(0.4,0,0.2,1) forwards',
-          }}
-        />
-      )}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-        transition={{ duration: 0.5, delay: 0.05 }}
-      >
-        {children}
-      </motion.div>
+      {children}
     </div>
   );
 }
