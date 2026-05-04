@@ -182,7 +182,7 @@ const STATS = [
 
 const PHRASES = [
   "Lead Automation Engineer",
-  "Robot Framework & API Testing",
+  "Backend & API Automation",
   "CI/CD · Jenkins · Azure DevOps",
   "AWS · DynamoDB · Datadog",
   "Shipping quality software",
