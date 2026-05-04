@@ -161,6 +161,14 @@ export default function PipelineSimulator({ onClose }) {
   }, [logs]);
 
   useEffect(() => {
+    if (phase !== 'done') return;
+    const t = setTimeout(() => {
+      logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 480);
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  useEffect(() => {
     const fn = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', fn);
     return () => window.removeEventListener('keydown', fn);
