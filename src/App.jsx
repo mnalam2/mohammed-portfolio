@@ -714,6 +714,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const scrollBarRef = useRef(null);
   const [formStatus, setFormStatus] = useState("idle");
   const [careerWalkOpen, setCareerWalkOpen] = useState(false);
   const [pipelineOpen, setPipelineOpen] = useState(false);
@@ -725,7 +726,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollBarRef.current) {
+        scrollBarRef.current.style.width = `${total > 0 ? (window.scrollY / total) * 100 : 0}%`;
+      }
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -774,6 +781,17 @@ export default function App() {
 
   return (
     <>
+      {/* Scroll progress bar */}
+      <div
+        ref={scrollBarRef}
+        className="fixed top-0 left-0 z-[60] h-[2px] pointer-events-none"
+        style={{
+          width: '0%',
+          background: 'linear-gradient(to right, #22d3ee, #3b82f6)',
+          boxShadow: '0 0 8px rgba(34,211,238,0.8), 0 0 20px rgba(34,211,238,0.4)',
+        }}
+      />
+
       <AnimatePresence>
         {!loaderDone && <MatrixLoader key="loader" onDone={() => setLoaderDone(true)} />}
         {careerWalkOpen && (
