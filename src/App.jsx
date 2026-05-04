@@ -502,7 +502,7 @@ const HACK_LINES = [
   { text: '> INITIALIZING SECURE CONNECTION...', delay: 600 },
   { text: '> IDENTITY CONFIRMED: MOHAMMED ALAM', delay: 1100 },
   { text: '> ROLE: LEAD AUTOMATION ENGINEER', delay: 1550 },
-  { text: '> SYSTEMS: JENKINS · DOCKER · AWS ECS', delay: 1950 },
+  { text: '> SYSTEMS: CI/CD · DATADOG · AWS', delay: 1950 },
   { text: '> ALL SYSTEMS ONLINE', delay: 2300 },
   { text: '> LAUNCHING PORTFOLIO...', delay: 2650, bright: true },
 ];
