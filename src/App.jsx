@@ -434,15 +434,13 @@ function BeamReveal({ children }) {
           }}
         />
       )}
-      <div
-        style={{
-          opacity: active ? 1 : 0,
-          transform: active ? 'translateY(0)' : 'translateY(10px)',
-          transition: active ? 'opacity 0.5s ease 0.05s, transform 0.5s ease 0.05s' : 'none',
-        }}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+        transition={{ duration: 0.5, delay: 0.05 }}
       >
         {children}
-      </div>
+      </motion.div>
     </div>
   );
 }
