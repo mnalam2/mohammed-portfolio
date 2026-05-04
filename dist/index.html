@@ -57,6 +57,41 @@
       <textarea name="message"></textarea>
     </form>
 
+    <!-- Beam scan reveal -->
+    <style>
+      @keyframes beam-scan { from { top: -80px; } to { top: 100%; } }
+    </style>
+    <script>
+    (function () {
+      function init() {
+        var sections = document.querySelectorAll('section[id]:not(#home)');
+        if (!sections.length) return false;
+        sections.forEach(function (section) {
+          if (section.dataset.beamInit) return;
+          section.dataset.beamInit = '1';
+          section.style.position = 'relative';
+          section.style.overflow = 'hidden';
+          var fired = false;
+          var obs = new IntersectionObserver(function (entries) {
+            if (fired || !entries[0].isIntersecting) return;
+            fired = true; obs.disconnect();
+            var beam = document.createElement('div');
+            beam.setAttribute('aria-hidden', 'true');
+            beam.style.cssText = 'position:absolute;left:0;right:0;top:-80px;height:80px;z-index:10;pointer-events:none;background:linear-gradient(to bottom,transparent,rgba(34,211,238,0.55) 45%,rgba(34,211,238,0.18) 60%,transparent);animation:beam-scan 0.7s cubic-bezier(0.4,0,0.2,1) forwards';
+            section.appendChild(beam);
+            setTimeout(function () { if (beam.parentNode) beam.remove(); }, 800);
+          }, { threshold: 0.05 });
+          obs.observe(section);
+        });
+        return true;
+      }
+      if (!init()) {
+        var attempts = 0;
+        var poll = setInterval(function () { if (init() || ++attempts > 20) clearInterval(poll); }, 200);
+      }
+    })();
+    </script>
+
     <!-- Print stylesheet for clean PDF/paper output -->
     <style media="print">
       header, nav { display: none !important; }
