@@ -292,10 +292,14 @@ function TokenizedLine({ line, lang }) {
   );
 }
 
-function CodeWindow({ snippet, lang, filename }) {
+function CodeWindow({ snippet, lang, filename, active = true }) {
   const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
+    if (!active) {
+      setDisplayed(snippet);
+      return;
+    }
     setDisplayed("");
     let i = 0;
     let t;
@@ -306,7 +310,7 @@ function CodeWindow({ snippet, lang, filename }) {
     };
     t = setTimeout(tick, 350);
     return () => clearTimeout(t);
-  }, [snippet]);
+  }, [snippet, active]);
 
   const lines = displayed.split("\n");
 
@@ -500,22 +504,20 @@ function Timeline() {
                     </span>
                   </button>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        key="snippet"
-                        initial={{ opacity: 0, maxHeight: 0 }}
-                        animate={{ opacity: 1, maxHeight: 500 }}
-                        exit={{ opacity: 0, maxHeight: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="mt-3">
-                          <CodeWindow snippet={exp.code} lang={exp.lang} filename={exp.filename} />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateRows: isOpen ? '1fr' : '0fr',
+                      opacity: isOpen ? 1 : 0,
+                      transition: 'grid-template-rows 0.3s ease-in-out, opacity 0.25s ease-in-out',
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="mt-3">
+                        <CodeWindow snippet={exp.code} lang={exp.lang} filename={exp.filename} active={isOpen} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             );
