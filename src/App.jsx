@@ -766,6 +766,7 @@ export default function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormStatus("loading");
     try {
       await emailjs.sendForm(
         "service_8jo6k7h",
@@ -1002,17 +1003,6 @@ export default function App() {
           <Timeline />
         </Section>
 
-        {/* EDUCATION */}
-        <Section id="education" title="Education">
-          <div className="rounded-lg border border-gray-800 bg-gray-900/40 p-5 text-sm text-gray-300">
-            <p className="text-white font-semibold">Bachelor of Science: Computer Engineering, 2017</p>
-            <p className="mt-1">University of Illinois At Urbana-Champaign - <span className="whitespace-nowrap">Champaign, IL</span></p>
-            <p className="mt-2 text-gray-400">
-              Applicable Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
-            </p>
-          </div>
-        </Section>
-
         {/* PROJECTS */}
         <Section id="projects" title="Projects">
           <div className="grid gap-6 md:grid-cols-2">
@@ -1057,6 +1047,17 @@ export default function App() {
           </div>
         </Section>
 
+        {/* EDUCATION */}
+        <Section id="education" title="Education">
+          <div className="rounded-lg border border-gray-800 bg-gray-900/40 p-5 text-sm text-gray-300">
+            <p className="text-white font-semibold">Bachelor of Science: Computer Engineering, 2017</p>
+            <p className="mt-1">University of Illinois At Urbana-Champaign - <span className="whitespace-nowrap">Champaign, IL</span></p>
+            <p className="mt-2 text-gray-400">
+              Applicable Coursework: Data Structures, Algorithms & Models of Computation, Virtual Reality, Artificial Intelligence
+            </p>
+          </div>
+        </Section>
+
         {/* CONTACT */}
         <Section id="contact" title="Contact">
           <div className="max-w-lg mx-auto">
@@ -1096,9 +1097,17 @@ export default function App() {
                 )}
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-cyan-500 hover:bg-cyan-400 text-black font-medium rounded-lg transition-colors text-sm"
+                  disabled={formStatus === "loading"}
+                  className="w-full py-2.5 bg-cyan-500 hover:bg-cyan-400 disabled:bg-cyan-700 disabled:cursor-not-allowed text-black font-medium rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
                 >
-                  Send Message
+                  {formStatus === "loading" ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      Sending…
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
                 </button>
               </form>
             )}
