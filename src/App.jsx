@@ -212,141 +212,8 @@ function useTypewriter(phrases) {
   return text;
 }
 
-const SYNTAX_RULES = {
-  robot: [
-    { re: /^\*{3}[^*\n]+\*{3}/, cls: "text-yellow-300 font-bold" },
-    { re: /^\[(?:Tags|Documentation|Setup|Teardown)\]/, cls: "text-cyan-300" },
-    { re: /^#[^\n]*/, cls: "text-gray-500 italic" },
-    { re: /\$\{[^}]+\}/, cls: "text-orange-300" },
-    { re: /"[^"]*"/, cls: "text-yellow-200" },
-    { re: /\b(?:Library|Resource|Create Session|POST On Session|Should Be Equal(?: As Integers)?|Set Variable|Log)\b/, cls: "text-blue-300" },
-    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
-  ],
-  csharp: [
-    { re: /\/\/[^\n]*/, cls: "text-gray-500 italic" },
-    { re: /\$?"[^"]*"/, cls: "text-yellow-200" },
-    { re: /\[(?:TestMethod|TestClass|Test)\]/, cls: "text-yellow-300" },
-    { re: /\b(?:public|private|protected|void|var|new|class|using|return|string|int|bool|static|async|await|this|null|true|false)\b/, cls: "text-purple-400" },
-    { re: /\b(?:Assert|Console)\b/, cls: "text-cyan-300" },
-    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
-  ],
-  java: [
-    { re: /\/\/[^\n]*/, cls: "text-gray-500 italic" },
-    { re: /"[^"]*"/, cls: "text-yellow-200" },
-    { re: /@\w+/, cls: "text-yellow-300" },
-    { re: /\b(?:public|private|void|class|import|return|String|int|boolean|new|static|final|null|true|false)\b/, cls: "text-purple-400" },
-    { re: /\b(?:assertTrue|assertEquals|driver|wait|By|WebElement)\b/, cls: "text-cyan-300" },
-    { re: /\b\d+\b/, cls: "text-orange-300" },
-  ],
-  python: [
-    { re: /#[^\n]*/, cls: "text-gray-500 italic" },
-    { re: /"[^"]*"|'[^']*'/, cls: "text-yellow-200" },
-    { re: /\b(?:def|class|import|from|return|assert|if|elif|else|for|in|not|and|or|True|False|None|await|async)\b/, cls: "text-purple-400" },
-    { re: /0x[0-9A-Fa-f]+/, cls: "text-orange-300" },
-    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
-    { re: /\b(?:self|print|len|range)\b/, cls: "text-blue-300" },
-  ],
-  javascript: [
-    { re: /\/\/[^\n]*/, cls: "text-gray-500 italic" },
-    { re: /"[^"]*"|'[^']*'/, cls: "text-yellow-200" },
-    { re: /\b(?:const|let|var|async|await|function|return|new|class|import|export|from|if|else|for|of|in|null|undefined|true|false)\b/, cls: "text-purple-400" },
-    { re: /\b(?:console|process|Promise)\b/, cls: "text-cyan-300" },
-    { re: /\b\d+(?:\.\d+)?\b/, cls: "text-orange-300" },
-  ],
-};
 
-function tokenizeLine(line, lang) {
-  const rules = SYNTAX_RULES[lang] || [];
-  const tokens = [];
-  let pos = 0;
-  while (pos < line.length) {
-    let matched = false;
-    for (const { re, cls } of rules) {
-      const m = line.slice(pos).match(re);
-      if (m && m.index === 0) {
-        tokens.push({ text: m[0], cls });
-        pos += m[0].length;
-        matched = true;
-        break;
-      }
-    }
-    if (!matched) {
-      if (tokens.length && tokens[tokens.length - 1].cls === "plain") {
-        tokens[tokens.length - 1].text += line[pos];
-      } else {
-        tokens.push({ text: line[pos], cls: "plain" });
-      }
-      pos++;
-    }
-  }
-  return tokens;
-}
 
-function TokenizedLine({ line, lang }) {
-  return (
-    <>
-      {tokenizeLine(line, lang).map((tok, i) => (
-        <span key={i} className={tok.cls === "plain" ? "text-gray-300" : tok.cls}>{tok.text}</span>
-      ))}
-    </>
-  );
-}
-
-function CodeWindow({ snippet, lang, filename }) {
-  const [displayed, setDisplayed] = useState("");
-
-  useEffect(() => {
-    setDisplayed("");
-    let i = 0;
-    let t;
-    const tick = () => {
-      i++;
-      setDisplayed(snippet.slice(0, i));
-      if (i < snippet.length) t = setTimeout(tick, 13);
-    };
-    t = setTimeout(tick, 150);
-    return () => clearTimeout(t);
-  }, [snippet]);
-
-  const lines = displayed.split("\n");
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      className="rounded-lg border border-gray-700/60 bg-gray-950 overflow-hidden"
-      style={{ boxShadow: "0 0 40px rgba(34,211,238,0.07)" }}
-    >
-      <div className="flex items-center gap-1.5 px-4 py-2.5 bg-gray-900/80 border-b border-gray-800">
-        <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-        <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-        <span className="ml-3 text-gray-500 text-[11px] tracking-wide">{filename}</span>
-      </div>
-      <div
-        className="overflow-auto p-4"
-        style={{ maxHeight: "340px", fontFamily: "'Fira Code','Cascadia Code','Consolas',monospace" }}
-      >
-        <div className="text-xs leading-relaxed">
-          {lines.map((line, i) => (
-            <div key={i} className="flex min-h-[1.5em]">
-              <span className="text-gray-700 select-none text-right mr-4 shrink-0" style={{ minWidth: "1.5rem" }}>
-                {i + 1}
-              </span>
-              <span className="whitespace-pre">
-                <TokenizedLine line={line} lang={lang} />
-                {i === lines.length - 1 && displayed.length < snippet.length && (
-                  <span className="inline-block w-[6px] h-[0.9em] bg-cyan-400/80 animate-pulse ml-0.5 align-middle" />
-                )}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 function StatCounter({ end, suffix, label, sublabel, delay = 0 }) {
   const ref = useRef(null);
@@ -442,7 +309,6 @@ function Timeline() {
 
   return (
     <div>
-      {/* ── Left: timeline ── */}
       <div className="relative">
         <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
         <motion.div
@@ -491,7 +357,6 @@ function Timeline() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }
