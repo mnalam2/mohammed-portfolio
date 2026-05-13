@@ -254,38 +254,53 @@ function StatsSection() {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section ref={ref} className="py-20 sm:py-28 border-t border-gray-800/60">
-      <motion.p
-        className="text-xs text-gray-500 uppercase tracking-[0.25em] text-center mb-12"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6 }}
-      >
-        By the Numbers
-      </motion.p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-14 sm:gap-8">
-        {STATS.map((s, i) => (
-          <StatCounter key={s.label} {...s} delay={i * 0.15} />
-        ))}
+    <section ref={ref} className="w-full py-24 sm:py-32 px-4 sm:px-10 md:px-20">
+      <div className="max-w-5xl mx-auto w-full">
+        <motion.div
+          className="mb-16 flex items-center gap-5"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="w-10 h-px bg-gray-800" />
+          <p className="text-[9px] text-gray-700 uppercase tracking-[0.45em] font-mono">By the Numbers</p>
+          <div className="flex-1 h-px bg-gray-800" />
+        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-14 sm:gap-8">
+          {STATS.map((s, i) => (
+            <StatCounter key={s.label} {...s} delay={i * 0.15} />
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
+const CHAPTER_NUMS = { skills: '01', experience: '02', projects: '03', education: '04', contact: '05' };
+
 function Section({ id, title, children }) {
+  const ch = CHAPTER_NUMS[id] ?? '00';
   return (
     <motion.section
       id={id}
-      className="scroll-mt-24"
+      className="scroll-mt-16 min-h-screen w-full py-28 sm:py-36 px-4 sm:px-10 md:px-20 flex flex-col justify-center"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.05 }}
     >
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
-        {title}
-      </h2>
-      {children}
+      <div className="max-w-5xl mx-auto w-full">
+        <div className="mb-10">
+          <p className="text-[9px] tracking-[0.45em] text-gray-700 font-mono uppercase mb-4">
+            Chapter {ch}
+          </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none">
+            {title}
+          </h2>
+          <div className="mt-5 w-12 h-[2px] bg-gradient-to-r from-cyan-500 to-transparent" />
+        </div>
+        {children}
+      </div>
     </motion.section>
   );
 }
@@ -692,14 +707,14 @@ export default function App() {
     </div>
 
     <motion.main
-      className="min-h-screen text-white font-sans p-4 sm:p-6 md:p-12"
+      className="min-h-screen text-white font-sans"
       initial={{ opacity: 0 }}
       animate={{ opacity: loaderDone ? 1 : 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
       style={{ position: 'relative', zIndex: 1 }}
     >
 
-      <div className="max-w-6xl mx-auto space-y-16 sm:space-y-24">
+      <div className="w-full">
 
         {/* NAV */}
         <header className="fixed top-0 left-0 w-full bg-black/70 backdrop-blur border-b border-gray-800 z-50">
@@ -759,71 +774,99 @@ export default function App() {
           </AnimatePresence>
         </header>
 
-        {/* HERO */}
-        <motion.section
+        {/* HERO — cinematic full-screen */}
+        <section
           id="home"
-          className="pt-24 sm:pt-28"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
+          className="relative h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden"
         >
-          <div className="flex flex-col-reverse sm:flex-row items-center justify-center gap-8 sm:gap-12">
-
-            {/* Text side */}
-            <div className="text-center sm:text-left flex-1 max-w-lg">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-                Mohammed Alam
-              </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-400 mt-4 h-7">
-                <span className="text-white">{typed}</span>
-                <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
-              </p>
-              <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl">
-                Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
-              </p>
-              <div className="mt-6 flex flex-col items-center sm:items-start gap-4">
-                <div className="flex gap-6 text-2xl">
-                  <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                    <FaLinkedin />
-                  </a>
-                  <a href="https://github.com/mnalam2" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                    <FaGithub />
-                  </a>
-                  <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400 transition-colors" aria-label="Email Mohammed">
-                    <FaEnvelope />
-                  </a>
-                </div>
-                <a
-                  href="/MohammedAlamResume.pdf"
-                  download
-                  className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
-                >
-                  <FaDownload className="text-black" /> Download Resume
-                </a>
+          {/* Small headshot above name */}
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+          >
+            <div className="w-px h-10 bg-gradient-to-b from-transparent to-cyan-500/50 mx-auto mb-4" />
+            <div className="relative inline-block">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 blur-md opacity-40 scale-110" />
+              <div className="relative p-[2px] rounded-full bg-gradient-to-br from-cyan-400 to-blue-500">
+                <img src="/headshot.jpg" alt="Mohammed Alam" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover object-top" />
               </div>
             </div>
+          </motion.div>
 
-            {/* Headshot */}
-            <motion.div
-              className="relative flex-shrink-0"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            >
-              {/* Glow ring */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 blur-lg opacity-30 scale-110" />
-              {/* Border ring */}
-              <div className="relative p-1 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600">
-                <img
-                  src="/headshot.jpg"
-                  alt="Mohammed Alam"
-                  className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full object-cover object-top bg-gray-800"
-                />
+          {/* Eyebrow */}
+          <motion.p
+            className="text-[9px] sm:text-[10px] tracking-[0.5em] text-gray-600 font-mono uppercase mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            San Diego, CA · Lead Automation Engineer
+          </motion.p>
+
+          {/* Name — massive, word-by-word slide reveal */}
+          <div className="flex flex-col items-center">
+            {['MOHAMMED', 'ALAM'].map((word, wi) => (
+              <div key={word} className="overflow-hidden leading-none">
+                <motion.div
+                  className="text-[18vw] sm:text-[15vw] md:text-[13vw] lg:text-[11vw] font-black tracking-tight text-white"
+                  initial={{ y: '110%' }}
+                  animate={{ y: 0 }}
+                  transition={{ delay: 0.8 + wi * 0.15, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {word}
+                </motion.div>
               </div>
-            </motion.div>
-
+            ))}
           </div>
-        </motion.section>
+
+          {/* Typewriter role */}
+          <motion.p
+            className="mt-7 text-xs sm:text-sm text-gray-600 font-mono tracking-[0.12em]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.6, duration: 0.8 }}
+          >
+            <span className="text-cyan-500">{typed}</span>
+            <span className="inline-block w-0.5 h-[1em] bg-cyan-500 ml-0.5 align-middle animate-pulse" />
+          </motion.p>
+
+          {/* Socials + Resume */}
+          <motion.div
+            className="mt-8 flex flex-col items-center gap-4"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.0, duration: 0.6 }}
+          >
+            <div className="flex gap-6 text-xl text-gray-600">
+              <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedin /></a>
+              <a href="https://github.com/mnalam2" className="hover:text-cyan-400 transition-colors" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub /></a>
+              <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:text-cyan-400 transition-colors" aria-label="Email"><FaEnvelope /></a>
+            </div>
+            <a
+              href="/MohammedAlamResume.pdf"
+              download
+              className="inline-flex items-center gap-2 px-6 py-2 border border-gray-800 hover:border-cyan-500/60 text-gray-500 hover:text-cyan-400 text-xs rounded-full transition-all duration-200 font-mono tracking-widest"
+            >
+              <FaDownload size={11} /> RESUME.PDF
+            </a>
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.5, duration: 1 }}
+          >
+            <span className="text-[8px] tracking-[0.5em] text-gray-800 font-mono uppercase">Scroll</span>
+            <div
+              className="w-px h-14 bg-gradient-to-b from-cyan-500/70 to-transparent"
+              style={{ animation: 'scroll-fade 2.2s ease-in-out infinite' }}
+            />
+          </motion.div>
+        </section>
 
         {/* SKILLS */}
         <Section id="skills" title="Skills">
@@ -983,8 +1026,8 @@ export default function App() {
           </div>
         </Section>
 
-        <footer className="text-center text-xs text-gray-500 pt-6 border-t border-gray-800">
-          © {new Date().getFullYear()} Mohammed Alam. All rights reserved.
+        <footer className="text-center text-[10px] tracking-[0.3em] font-mono text-gray-800 py-10 border-t border-gray-900/60 uppercase">
+          © {new Date().getFullYear()} Mohammed Alam
         </footer>
       </div>
 
