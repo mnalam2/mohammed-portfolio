@@ -425,6 +425,7 @@ function Section({ id, title, children }) {
 
 function Timeline() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [openSnippet, setOpenSnippet] = useState(null);
   const cardRefs = useRef([]);
 
   useEffect(() => {
@@ -442,7 +443,6 @@ function Timeline() {
 
   return (
     <div>
-      {/* ── Left: timeline ── */}
       <div className="relative">
         <div className="absolute left-[13px] top-5 bottom-5 w-px bg-gray-800" />
         <motion.div
@@ -454,44 +454,74 @@ function Timeline() {
           transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
         />
         <div className="space-y-6">
-          {EXPERIENCES.map((exp, i) => (
-            <motion.div
-              key={exp.role}
-              ref={(el) => { cardRefs.current[i] = el; }}
-              className="flex gap-5"
-              initial={{ opacity: 0, x: -18 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
-            >
-              <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
-                <div className={`w-3.5 h-3.5 rounded-full bg-gray-950 border-2 z-10 transition-all duration-300 ${
-                  activeIdx === i
-                    ? "border-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.8)]"
-                    : "border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)]"
-                }`} />
-              </div>
-              <div className={`flex-1 rounded-lg border bg-gray-900/40 p-5 mb-1 transition-all duration-300 ${
-                activeIdx === i
-                  ? "border-cyan-500/40 shadow-[0_0_24px_rgba(34,211,238,0.07)]"
-                  : "border-gray-800"
-              }`}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
-                  <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+          {EXPERIENCES.map((exp, i) => {
+            const isOpen = openSnippet === i;
+            return (
+              <motion.div
+                key={exp.role}
+                ref={(el) => { cardRefs.current[i] = el; }}
+                className="flex gap-5"
+                initial={{ opacity: 0, x: -18 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.4, delay: i * 0.08, ease: "easeOut" }}
+              >
+                <div className="relative flex-shrink-0 w-7 flex justify-center pt-[1.35rem]">
+                  <div className={`w-3.5 h-3.5 rounded-full bg-gray-950 border-2 z-10 transition-all duration-300 ${
+                    activeIdx === i
+                      ? "border-cyan-300 shadow-[0_0_14px_rgba(34,211,238,0.8)]"
+                      : "border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.45)]"
+                  }`} />
                 </div>
-                <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
-                <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
-                  {exp.bullets.map((b, j) => (
-                    <li key={j}>{b}</li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          ))}
+                <div className={`flex-1 rounded-lg border bg-gray-900/40 p-5 mb-1 transition-all duration-300 ${
+                  activeIdx === i
+                    ? "border-cyan-500/40 shadow-[0_0_24px_rgba(34,211,238,0.07)]"
+                    : "border-gray-800"
+                }`}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-white">{exp.role}</h3>
+                    <span className="text-xs text-gray-400 shrink-0">{exp.time}</span>
+                  </div>
+                  <div className="text-sm text-cyan-400/80 mt-0.5">{exp.org}</div>
+                  <ul className="list-disc list-inside mt-3 space-y-1 text-gray-300 text-sm">
+                    {exp.bullets.map((b, j) => (
+                      <li key={j}>{b}</li>
+                    ))}
+                  </ul>
+
+                  {/* Code snippet toggle */}
+                  <button
+                    onClick={() => setOpenSnippet(isOpen ? null : i)}
+                    className="mt-4 flex items-center gap-2 font-mono text-[11px] text-gray-500 hover:text-cyan-400 transition-colors group"
+                  >
+                    <span className={`transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}>▶</span>
+                    <span className="border border-gray-700 group-hover:border-cyan-500/50 rounded px-2 py-0.5 bg-gray-900 group-hover:bg-cyan-500/5 transition-colors">
+                      {exp.filename}
+                    </span>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        key="snippet"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-3">
+                          <CodeWindow snippet={exp.code} lang={exp.lang} filename={exp.filename} />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-
     </div>
   );
 }
