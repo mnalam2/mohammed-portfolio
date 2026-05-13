@@ -328,25 +328,32 @@ function CodeWindow({ snippet, lang, filename, active = true }) {
         <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
         <span className="ml-3 text-gray-500 text-[11px] tracking-wide">{filename}</span>
       </div>
-      <div
-        className="overflow-auto p-4"
-        style={{ maxHeight: "340px", fontFamily: "'Fira Code','Cascadia Code','Consolas',monospace" }}
-      >
-        <div className="text-xs leading-relaxed">
-          {lines.map((line, i) => (
-            <div key={i} className="flex min-h-[1.5em]">
-              <span className="text-gray-700 select-none text-right mr-4 shrink-0" style={{ minWidth: "1.5rem" }}>
-                {i + 1}
-              </span>
-              <span className="whitespace-pre">
-                <TokenizedLine line={line} lang={lang} />
-                {i === lines.length - 1 && displayed.length < snippet.length && (
-                  <span className="inline-block w-[6px] h-[0.9em] bg-cyan-400/80 animate-pulse ml-0.5 align-middle" />
-                )}
-              </span>
-            </div>
-          ))}
+      <div className="relative">
+        <div
+          className="overflow-auto p-4"
+          style={{ maxHeight: "340px", fontFamily: "'Fira Code','Cascadia Code','Consolas',monospace", WebkitOverflowScrolling: "touch" }}
+        >
+          <div className="text-xs leading-relaxed">
+            {lines.map((line, i) => (
+              <div key={i} className="flex min-h-[1.5em]">
+                <span className="text-gray-700 select-none text-right mr-4 shrink-0" style={{ minWidth: "1.5rem" }}>
+                  {i + 1}
+                </span>
+                <span className="whitespace-pre">
+                  <TokenizedLine line={line} lang={lang} />
+                  {i === lines.length - 1 && displayed.length < snippet.length && (
+                    <span className="inline-block w-[6px] h-[0.9em] bg-cyan-400/80 animate-pulse ml-0.5 align-middle" />
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
+        {/* Right-fade gradient: signals horizontal scrollability on mobile */}
+        <div
+          className="absolute top-0 right-0 bottom-0 w-8 pointer-events-none"
+          style={{ background: "linear-gradient(to right, transparent, rgb(3,7,18))" }}
+        />
       </div>
     </motion.div>
   );
