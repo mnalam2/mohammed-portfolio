@@ -304,7 +304,7 @@ function CodeWindow({ snippet, lang, filename }) {
       setDisplayed(snippet.slice(0, i));
       if (i < snippet.length) t = setTimeout(tick, 13);
     };
-    t = setTimeout(tick, 150);
+    t = setTimeout(tick, 350);
     return () => clearTimeout(t);
   }, [snippet]);
 
@@ -504,10 +504,10 @@ function Timeline() {
                     {isOpen && (
                       <motion.div
                         key="snippet"
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        initial={{ opacity: 0, maxHeight: 0 }}
+                        animate={{ opacity: 1, maxHeight: 500 }}
+                        exit={{ opacity: 0, maxHeight: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
                         <div className="mt-3">
