@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FaLinkedin, FaGithub, FaEnvelope, FaDownload, FaBars, FaTimes, FaArrowUp } from "react-icons/fa";
-import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useInView, useMotionValue, animate, useTransform } from "framer-motion";
 import CareerWalk from "./CareerWalk";
 import PipelineSimulator from "./PipelineSimulator";
 
@@ -21,32 +21,26 @@ const NAV_ITEMS = [
 const SKILL_GROUPS = [
   {
     label: "Languages & Frameworks",
-    color: "#22d3ee",
     tags: ["C", "C++", "C#", "Java", "Python", "JavaScript", "Oracle SQL", "MySQL"],
   },
   {
     label: "CI/CD & DevOps",
-    color: "#3b82f6",
     tags: ["Jenkins", "TeamCity", "Octopus Deploy", "Azure DevOps", "Docker"],
   },
   {
     label: "Testing Expertise",
-    color: "#a855f7",
     tags: ["Component Testing (C#)", "Playwright E2E", "REST API Testing", "CI/CD Automation", "Load Testing"],
   },
   {
     label: "Test Automation Tools",
-    color: "#f59e0b",
     tags: ["Playwright", "Robot Framework", "Selenium", "JMeter", "Postman"],
   },
   {
     label: "Cloud & Monitoring",
-    color: "#10b981",
     tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Datadog"],
   },
   {
     label: "Version Control & Collaboration",
-    color: "#ec4899",
     tags: ["Git", "Bitbucket", "SVN", "Jira", "Confluence", "TestRail", "SFDC"],
   },
 ];
@@ -269,16 +263,9 @@ function StatsSection() {
       >
         By the Numbers
       </motion.p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-14 sm:gap-8">
         {STATS.map((s, i) => (
-          <div
-            key={s.label}
-            className="rounded-2xl border border-gray-800/80 bg-gray-900/20 backdrop-blur-sm p-6 sm:p-8 relative overflow-hidden hover:border-cyan-500/20 transition-colors duration-500 group"
-            style={{ boxShadow: '0 0 0 1px rgba(34,211,238,0.03), 0 4px 24px rgba(0,0,0,0.3)' }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-            <StatCounter {...s} delay={i * 0.15} />
-          </div>
+          <StatCounter key={s.label} {...s} delay={i * 0.15} />
         ))}
       </div>
     </section>
@@ -295,13 +282,9 @@ function Section({ id, title, children }) {
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
     >
-      <div className="flex items-center gap-3 mb-6">
-        <span className="font-mono text-cyan-700 text-lg sm:text-xl select-none shrink-0">//</span>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 shrink-0">
-          {title}
-        </h2>
-        <div className="flex-1 h-px bg-gradient-to-r from-cyan-500/40 via-cyan-500/10 to-transparent" />
-      </div>
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 border-b border-gray-800 pb-3 mb-6">
+        {title}
+      </h2>
       {children}
     </motion.section>
   );
@@ -591,74 +574,6 @@ function DotGrid() {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />;
 }
 
-function CursorTrail() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (window.matchMedia('(hover: none)').matches) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-
-    const onMove = (e) => {
-      for (let i = 0; i < 3; i++) {
-        particles.push({
-          x: e.clientX + (Math.random() - 0.5) * 10,
-          y: e.clientY + (Math.random() - 0.5) * 10,
-          vx: (Math.random() - 0.5) * 0.9,
-          vy: (Math.random() - 0.5) * 0.9 - 0.4,
-          life: 1,
-          r: Math.random() * 2.8 + 0.6,
-        });
-      }
-    };
-
-    let raf;
-    const loop = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles = particles.filter(p => p.life > 0);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= 0.038;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34,211,238,${p.life * 0.65})`;
-        ctx.shadowColor = '#22d3ee';
-        ctx.shadowBlur = 7;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-      raf = requestAnimationFrame(loop);
-    };
-
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('resize', resize);
-    raf = requestAnimationFrame(loop);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 3 }}
-    />
-  );
-}
-
 export default function App() {
   const [loaderDone, setLoaderDone] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -668,28 +583,6 @@ export default function App() {
   const [formStatus, setFormStatus] = useState("idle");
   const [careerWalkOpen, setCareerWalkOpen] = useState(false);
   const [pipelineOpen, setPipelineOpen] = useState(false);
-
-  // Headshot 3D tilt
-  const headshotRef = useRef(null);
-  const [headshotShine, setHeadshotShine] = useState({ x: 50, y: 50 });
-  const tiltX = useSpring(0, { stiffness: 180, damping: 18 });
-  const tiltY = useSpring(0, { stiffness: 180, damping: 18 });
-
-  const onHeadshotMove = (e) => {
-    if (!headshotRef.current) return;
-    const rect = headshotRef.current.getBoundingClientRect();
-    const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
-    const dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
-    tiltX.set(dy * -13);
-    tiltY.set(dx * 13);
-    setHeadshotShine({ x: ((dx + 1) / 2) * 100, y: ((dy + 1) / 2) * 100 });
-  };
-
-  const onHeadshotLeave = () => {
-    tiltX.set(0);
-    tiltY.set(0);
-    setHeadshotShine({ x: 50, y: 50 });
-  };
 
   const typed = useTypewriter(PHRASES);
 
@@ -776,7 +669,6 @@ export default function App() {
       </AnimatePresence>
 
     <DotGrid />
-    <CursorTrail />
 
     {/* Orbs live outside motion.main so opacity animation on main doesn't trap them in its stacking context */}
     <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
@@ -879,19 +771,12 @@ export default function App() {
 
             {/* Text side */}
             <div className="text-center sm:text-left flex-1 max-w-lg">
-              <h1
-                className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text"
-                style={{
-                  backgroundImage: 'linear-gradient(90deg, #22d3ee, #3b82f6, #a78bfa, #3b82f6, #22d3ee)',
-                  backgroundSize: '300% 100%',
-                  animation: 'gradient-x 6s ease infinite',
-                }}
-              >
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
                 Mohammed Alam
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-gray-400 mt-4 h-7">
                 <span className="text-white">{typed}</span>
-                <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle" style={{ animation: 'cursor-glow 1.1s ease-in-out infinite' }} />
+                <span className="inline-block w-0.5 h-5 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
               </p>
               <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl">
                 Engineer with deep experience in web, API, and backend validation. Trusted to lead strategy, own delivery, and ship high-quality software fast.
@@ -911,10 +796,7 @@ export default function App() {
                 <a
                   href="/MohammedAlamResume.pdf"
                   download
-                  className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full transition-all duration-300 hover:bg-gray-100 hover:scale-105"
-                  style={{ boxShadow: '0 0 18px rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.3)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 28px rgba(255,255,255,0.35), 0 6px 20px rgba(0,0,0,0.4)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 18px rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.3)'; }}
+                  className="inline-flex items-center gap-2 px-5 sm:px-6 py-2 bg-white text-black font-medium rounded-full shadow hover:shadow-lg transition hover:bg-gray-200"
                 >
                   <FaDownload className="text-black" /> Download Resume
                 </a>
@@ -922,39 +804,23 @@ export default function App() {
             </div>
 
             {/* Headshot */}
-            <div
-              ref={headshotRef}
-              style={{ perspective: '700px' }}
-              onMouseMove={onHeadshotMove}
-              onMouseLeave={onHeadshotLeave}
+            <motion.div
+              className="relative flex-shrink-0"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             >
-              <motion.div
-                className="relative flex-shrink-0 cursor-pointer"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={{ rotateX: tiltX, rotateY: tiltY }}
-                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              >
-                {/* Animated glow ring */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 blur-xl opacity-40 scale-110" />
-                {/* Border ring */}
-                <div className="relative p-1 rounded-full bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-500">
-                  <img
-                    src="/headshot.jpg"
-                    alt="Mohammed Alam"
-                    className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full object-cover object-top bg-gray-800"
-                  />
-                </div>
-                {/* Holographic shine overlay */}
-                <div
-                  className="absolute inset-0 rounded-full pointer-events-none transition-all duration-75"
-                  style={{
-                    background: `radial-gradient(circle at ${headshotShine.x}% ${headshotShine.y}%, rgba(255,255,255,0.22) 0%, rgba(34,211,238,0.07) 40%, transparent 68%)`,
-                    zIndex: 10,
-                  }}
+              {/* Glow ring */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 blur-lg opacity-30 scale-110" />
+              {/* Border ring */}
+              <div className="relative p-1 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600">
+                <img
+                  src="/headshot.jpg"
+                  alt="Mohammed Alam"
+                  className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-full object-cover object-top bg-gray-800"
                 />
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
 
           </div>
         </motion.section>
@@ -962,10 +828,9 @@ export default function App() {
         {/* SKILLS */}
         <Section id="skills" title="Skills">
           <div className="grid md:grid-cols-2 gap-4">
-            {SKILL_GROUPS.map(({ label, tags, color }) => (
-              <div key={label} className="rounded-lg border border-gray-800 bg-gray-900/40 p-5 relative overflow-hidden hover:border-gray-700 transition-colors duration-300">
-                <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-lg" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
-                <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color }}>{label}</p>
+            {SKILL_GROUPS.map(({ label, tags }) => (
+              <div key={label} className="rounded-lg border border-gray-800 bg-gray-900/40 p-5">
+                <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-3">{label}</p>
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
                     <span
@@ -1061,10 +926,6 @@ export default function App() {
         {/* CONTACT */}
         <Section id="contact" title="Contact">
           <div className="max-w-lg mx-auto">
-            <div
-              className="rounded-2xl border border-gray-800/60 bg-gray-900/20 backdrop-blur-sm p-6 sm:p-8"
-              style={{ boxShadow: '0 4px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(34,211,238,0.04)' }}
-            >
             {formStatus === "success" ? (
               <div className="text-center py-10">
                 <p className="text-cyan-400 font-medium text-lg">Message sent!</p>
@@ -1115,7 +976,6 @@ export default function App() {
                 </button>
               </form>
             )}
-            </div>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-cyan-400 mt-6">
               <a href="mailto:mohammed.nafi.alam@gmail.com" className="hover:underline">mohammed.nafi.alam@gmail.com</a>
               <a href="https://www.linkedin.com/in/mohammed-alam-8193009a/" className="hover:underline" target="_blank" rel="noopener noreferrer">LinkedIn</a>

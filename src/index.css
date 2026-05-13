@@ -34,15 +34,3 @@ body::after {
   0%, 100% { transform: translate(0,   0)   scale(1);    }
   50%       { transform: translate(4%, -5%) scale(1.08); }
 }
-
-/* Animated gradient shift for hero name */
-@keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50%       { background-position: 100% 50%; }
-}
-
-/* Typewriter cursor glow pulse */
-@keyframes cursor-glow {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(34,211,238,0.9); }
-  50%       { opacity: 0.4; box-shadow: 0 0 2px rgba(34,211,238,0.3); }
-}
