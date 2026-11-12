@@ -29,7 +29,7 @@ const SKILL_GROUPS = [
   },
   {
     label: "Testing Expertise",
-    tags: ["Component Testing (C#)", "Playwright E2E", "REST API Testing", "CI/CD Automation", "Load Testing"],
+    tags: ["Component Testing (C#)", "End-to-End Testing (JavaScript)", "REST/GraphQL API Testing", "CI/CD Automation", "Load Testing"],
   },
   {
     label: "Test Automation Tools",
@@ -37,11 +37,15 @@ const SKILL_GROUPS = [
   },
   {
     label: "Cloud & Monitoring",
-    tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Datadog"],
+    tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Azure Service Bus", "RabbitMQ", "Datadog"],
   },
   {
     label: "Version Control & Collaboration",
     tags: ["Git", "Bitbucket", "SVN", "Jira", "Confluence", "TestRail", "SFDC"],
+  },
+  {
+    label: "AI",
+    tags: ["Claude", "ChatGPT", "Copilot", "Rovo", "Bits AI", "Postbot"],
   },
 ];
 
