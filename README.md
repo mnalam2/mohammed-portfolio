@@ -6,7 +6,7 @@ Built as a single-page React app with smooth-scrolling sections for skills, work
 
 ## Highlights
 
-- **Career Walk** (`src/CareerWalk.jsx`) — a side-scrolling, keyboard/touch-controlled mini-game where you walk a character through a city skyline; each building is a stop on the career timeline (United Airlines → Abbott → Generali, and more) that opens a detail card as you approach.
+- **Career Walk** (`src/CareerWalk.jsx`) — a side-scrolling, keyboard/touch-controlled mini-game where you walk a character through a city skyline; each building is a stop on the career timeline (United Airlines → Abbott → Redion, and more) that opens a detail card as you approach.
 - **Pipeline Simulator** (`src/PipelineSimulator.jsx`) — an animated CI/CD pipeline that plays through checkout → install → test → deploy stages with realistic streaming log output.
 - **Contact form** wired to [EmailJS](https://www.emailjs.com/), with a hidden mirror form in `index.html` for Netlify Forms detection and a honeypot field for spam.
 - **SEO & sharing** — Open Graph and Twitter cards, JSON-LD `Person` schema, `sitemap.xml`, `robots.txt`, and a web manifest.

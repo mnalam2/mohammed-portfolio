@@ -93,7 +93,7 @@ const STAGES = [
       { text: '  Draining connections from old tasks...', t: 'out' },
       { text: '  Waiting for service stability...', t: 'out' },
       { text: '  Service payment-service is stable', t: 'out' },
-      { text: '✓  Deployed → staging.generali.internal', t: 'ok' },
+      { text: '✓  Deployed → staging.redion.internal', t: 'ok' },
     ],
   },
   {

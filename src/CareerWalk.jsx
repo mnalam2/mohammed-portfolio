@@ -77,8 +77,8 @@ const STOPS = [
   {
     id: 4,
     worldX: 3900,
-    company: 'Generali Global Assistance',
-    short: 'Generali',
+    company: 'Redion',
+    short: 'Redion',
     location: 'San Diego, CA',
     period: '07/2021 – Present',
     role: 'Lead Automation Engineer',
