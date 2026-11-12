@@ -53,7 +53,7 @@ const EXPERIENCES = [
   {
     role: "Lead Automation Engineer",
     time: "07/2021 – Current",
-    org: "Generali Global Assistance – San Diego, CA",
+    org: "Redion – San Diego, CA",
     bullets: [
       "As the SME for Integration & Payments, led automation strategy, guided engineers on framework design, and root caused production payment issues across microservices.",
       "Built Robot Framework (Python) API automation in Jenkins CI/CD, accelerating release cycles by 40%, and engineered a configurable JMeter load emulator (Groovy) running exact operation mixes and sequenced flows.",
@@ -177,7 +177,7 @@ console.log("Deploy complete ✓");`,
 ];
 
 const STATS = [
-  { end: 40, suffix: "%", label: "Faster Release Cycles",    sublabel: "CI/CD automation at Generali" },
+  { end: 40, suffix: "%", label: "Faster Release Cycles",    sublabel: "CI/CD automation at Redion" },
   { end: 50, suffix: "%", label: "Faster Defect Triage",     sublabel: "Datadog observability dashboards" },
   { end: 10, suffix: "+", label: "Years Leading Automation", sublabel: "Across finance, health & travel" },
 ];
