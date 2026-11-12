@@ -53,8 +53,8 @@ const STOPS = [
     buildW: 195,
     buildH: 200,
     bullets: [
-      'Corporate training: Java, Oracle SQL, JUnit, Selenium',
-      'Designed automated test scenarios; IBM AS/400 backend validation',
+      'Automated client test scenarios: Java, Selenium, JUnit',
+      'JDBC/Oracle SQL data checks; IBM AS/400 validation',
     ],
   },
   {
@@ -87,8 +87,8 @@ const STOPS = [
     buildH: 295,
     bullets: [
       '40% faster releases — Robot Framework + Jenkins CI/CD',
+      'Agentic QA orchestrator → REST & GraphQL tests',
       'Datadog dashboards → 50% faster defect triage',
-      'AWS DynamoDB, ECS, SNS, SQS microservices coverage',
     ],
   },
 ];
