@@ -29,7 +29,7 @@ const SKILL_GROUPS = [
   },
   {
     label: "Testing Expertise",
-    tags: ["Component Testing (C#)", "Playwright E2E", "REST API Testing", "CI/CD Automation", "Load Testing"],
+    tags: ["Component Testing (C#)", "End-to-End Testing (JavaScript)", "REST/GraphQL API Testing", "CI/CD Automation", "Load Testing"],
   },
   {
     label: "Test Automation Tools",
@@ -37,11 +37,15 @@ const SKILL_GROUPS = [
   },
   {
     label: "Cloud & Monitoring",
-    tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Datadog"],
+    tags: ["AWS DynamoDB", "ECS", "SNS", "SQS", "Azure Service Bus", "RabbitMQ", "Datadog"],
   },
   {
     label: "Version Control & Collaboration",
     tags: ["Git", "Bitbucket", "SVN", "Jira", "Confluence", "TestRail", "SFDC"],
+  },
+  {
+    label: "AI",
+    tags: ["Claude", "ChatGPT", "Copilot", "Rovo", "Bits AI", "Postbot"],
   },
 ];
 
@@ -51,11 +55,10 @@ const EXPERIENCES = [
     time: "07/2021 – Current",
     org: "Generali Global Assistance – San Diego, CA",
     bullets: [
-      "Built scalable API test automation using Robot Framework (Python), fully integrated into Jenkins CI/CD, accelerating release cycles by 40%.",
-      "Developed and maintained JavaScript-based Playwright tests for UI end-to-end coverage.",
-      "Built and optimized real-time observability dashboards in Datadog, enabling proactive defect detection and reducing triage time by 50%.",
-      "Collaborated with DevOps teams to test complex AWS microservices: DynamoDB, ECS, SNS, SQS.",
-      "As the SME for Integration & Payments, provided technical leadership on automation strategy — guided engineers on scalable framework design, streamlined test coverage, and reinforced best practices across teams.",
+      "As the SME for Integration & Payments, led automation strategy, guided engineers on framework design, and root caused production payment issues across microservices.",
+      "Built Robot Framework (Python) API automation in Jenkins CI/CD, accelerating release cycles by 40%, and engineered a configurable JMeter load emulator (Groovy) running exact operation mixes and sequenced flows.",
+      "Piloted and extended an agentic QA orchestrator (Copilot agents) that turns work items into executed REST and GraphQL tests, catching defects before merges; used AI to generate component tests across services and API specs for 7+ partners.",
+      "Developed real-time Datadog observability dashboards that reduced triage time by 50% and a Python API parity harness in Jenkins that caught contract and validation defects before platform migrations.",
     ],
     lang: "robot",
     filename: "test_payment_api.robot",
@@ -106,8 +109,7 @@ public class AccountMigrationTests
     time: "06/2018 – 08/2019",
     org: "Cognizant – Irving, TX",
     bullets: [
-      "Completed accelerated corporate training in consulting principles, Java, Oracle SQL, JDBC, JUnit, JSP, and Selenium.",
-      "Analyzed client requirements, designed automated test scenarios, triaged defects through SFDC, and ensured seamless deliveries upon project specifications.",
+      "Turned client requirements into automated test scenarios (Java, Selenium, JUnit), verified data (JDBC, Oracle SQL), and triaged defects through SFDC.",
       "Validated client backend coding through IBM AS/400 and query testing.",
     ],
     lang: "java",
